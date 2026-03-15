@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Help us improve Nexus by reporting issues.">
+  <meta property="og:title" content="Report a Bug – Nexus">
+  <meta property="og:description" content="Help us improve Nexus by reporting issues.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Report a Bug – Nexus">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%235b5bd6'/><text y='.9em' font-size='72' x='14' font-family='Arial' font-weight='bold' fill='white'>N</text></svg>">
+  <meta name="theme-color" content="#5b5bd6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Bug</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #0a0a0a;
+      --border: rgba(255,255,255,0.08);
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+      --text-muted: #555;
+    }
+    html, body { font-family: 'Sora', sans-serif; background: var(--bg-main); color: var(--text-primary); }
+    body { overflow-x: hidden; }
+
+    /* TOPBAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .logo-box {
+      width: 30px; height: 30px; background: #fff; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #000; flex-shrink: 0;
+    }
+    .brand-name { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
+    .back-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 14px; border-radius: 9px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+      color: var(--text-secondary); font-family: 'Sora', sans-serif;
+      font-size: 12.5px; font-weight: 500; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+
+    /* HERO */
+    .hero {
+      padding: 64px 28px 48px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      margin-bottom: 20px; letter-spacing: 0.4px;
+    }
+    .hero h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 14px; }
+    .hero p { font-size: 15px; color: var(--text-secondary); max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+    /* CONTAINER */
+    .container { max-width: 640px; margin: 0 auto; padding: 0 28px 80px; }
+
+    /* INFO BOX */
+    .info-banner {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 28px;
+    }
+    .info-banner-icon { font-size: 16px; flex-shrink: 0; }
+    .info-banner p { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
+
+    /* FORM GROUPS */
+    .form-group { margin-bottom: 22px; }
+    .form-label {
+      display: block; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      color: var(--text-muted); margin-bottom: 10px;
+    }
+    .req { color: rgba(248,113,113,0.8); margin-left: 2px; }
+
+    /* CATEGORY GRID */
+    .cat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    }
+    .cat-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; padding: 14px 10px;
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 10px; cursor: pointer; transition: all 0.2s;
+      font-family: 'Sora', sans-serif; font-size: 12px;
+      color: var(--text-secondary); font-weight: 400;
+    }
+    .cat-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.14); color: var(--text-primary); }
+    .cat-btn.active { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.22); color: var(--text-primary); }
+    .cat-icon { font-size: 18px; }
+
+    /* SEVERITY ROW */
+    .sev-row { display: flex; gap: 8px; }
+    .sev-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 11px 10px; border-radius: 10px;
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'Sora', sans-serif; font-size: 12.5px;
+      color: var(--text-secondary); font-weight: 400;
+    }
+    .sev-btn:hover { background: rgba(255,255,255,0.05); }
+    .sev-btn.active-low    { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.25); color: #4ade80; }
+    .sev-btn.active-med    { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: #fbbf24; }
+    .sev-btn.active-high   { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.25); color: #f87171; }
+    .sev-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sd-low  { background: #4ade80; }
+    .sd-med  { background: #fbbf24; }
+    .sd-high { background: #f87171; }
+
+    /* INPUTS */
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px;
+      color: var(--text-primary); font-family: 'Sora', sans-serif; font-size: 13px;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
+    }
+    .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+      cursor: pointer;
+    }
+    .form-select option { background: #111; }
+
+    /* ROW */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* SUBMIT */
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: #fff; border: none; border-radius: 10px;
+      color: #000; font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; margin-top: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .submit-btn:hover { background: #e0e0e0; }
+    .submit-btn:active { transform: scale(0.99); }
+
+    /* SUCCESS SCREEN */
+    .success-screen {
+      display: none; text-align: center; padding: 20px 0 60px;
+    }
+    .success-icon-wrap {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; margin: 0 auto 22px;
+    }
+    .success-screen h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+    .success-screen p { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; max-width: 340px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+    .ticket-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 20px;
+      font-size: 13px; color: var(--text-secondary); font-family: monospace;
+      margin-bottom: 28px;
+    }
+    .success-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .action-btn {
+      padding: 9px 20px; border-radius: 9px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+      color: var(--text-secondary); font-family: 'Sora', sans-serif;
+      font-size: 13px; cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+
+    /* DIVIDER */
+    .form-divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+    /* FOOTER */
+    .page-footer {
+      border-top: 1px solid var(--border); padding: 28px; text-align: center;
+      color: var(--text-muted); font-size: 12px;
+    }
+    .page-footer a { color: var(--text-muted); text-decoration: none; margin: 0 10px; transition: color 0.2s; }
+    .page-footer a:hover { color: var(--text-secondary); }
+
+    @media(max-width:520px) {
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-box">A</div>
+    <span class="brand-name">Report a Bug</span>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🐛 Bug Report</div>
+  <h1>Report a Bug</h1>
+  <p>Help us improve by describing the issue you encountered in detail.</p>
+</div>
+
+<!-- MAIN FORM -->
+<div class="container">
+  <div id="formView">
+
+    <div class="info-banner">
+      <span class="info-banner-icon">ℹ️</span>
+      <p>Your report will be reviewed by our engineering team. Please include as much detail as possible to help us reproduce and fix the issue quickly.</p>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="form-group">
+      <label class="form-label">Bug Category</label>
+      <div class="cat-grid">
+        <div class="cat-btn active" onclick="selectCat(this)">
+          <span class="cat-icon">💬</span> Chat
+        </div>
+        <div class="cat-btn" onclick="selectCat(this)">
+          <span class="cat-icon">🎨</span> UI / Display
+        </div>
+        <div class="cat-btn" onclick="selectCat(this)">
+          <span class="cat-icon">⚡</span> Performance
+        </div>
+        <div class="cat-btn" onclick="selectCat(this)">
+          <span class="cat-icon">🔑</span> Login / Auth
+        </div>
+        <div class="cat-btn" onclick="selectCat(this)">
+          <span class="cat-icon">💳</span> Billing
+        </div>
+        <div class="cat-btn" onclick="selectCat(this)">
+          <span class="cat-icon">🔌</span> API
+        </div>
+      </div>
+    </div>
+
+    <!-- SEVERITY -->
+    <div class="form-group">
+      <label class="form-label">Severity <span class="req">*</span></label>
+      <div class="sev-row">
+        <div class="sev-btn" id="sev-low" onclick="selectSev('low')">
+          <div class="sev-dot sd-low"></div> Low
+        </div>
+        <div class="sev-btn active-med" id="sev-med" onclick="selectSev('med')">
+          <div class="sev-dot sd-med"></div> Medium
+        </div>
+        <div class="sev-btn" id="sev-high" onclick="selectSev('high')">
+          <div class="sev-dot sd-high"></div> High / Crash
+        </div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- TITLE -->
+    <div class="form-group">
+      <label class="form-label">Bug Title <span class="req">*</span></label>
+      <input type="text" class="form-input" id="bugTitle" placeholder="Short description of the bug…">
+    </div>
+
+    <!-- STEPS -->
+    <div class="form-group">
+      <label class="form-label">Steps to Reproduce <span class="req">*</span></label>
+      <textarea class="form-textarea" id="stepsField" rows="5" placeholder="1. Go to…&#10;2. Click on…&#10;3. Observe that…"></textarea>
+    </div>
+
+    <!-- BEHAVIOR -->
+    <div class="form-group">
+      <label class="form-label">Expected vs Actual Behavior</label>
+      <textarea class="form-textarea" id="behaviorField" rows="4" placeholder="What did you expect to happen? What actually happened instead?"></textarea>
+    </div>
+
+    <!-- ENVIRONMENT -->
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Browser</label>
+        <select class="form-select form-input" id="browserField">
+          <option value="">Select browser…</option>
+          <option>Chrome (Desktop)</option>
+          <option>Firefox (Desktop)</option>
+          <option>Safari (Desktop)</option>
+          <option>Edge (Desktop)</option>
+          <option>Chrome (Mobile)</option>
+          <option>Safari (Mobile)</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Operating System</label>
+        <select class="form-select form-input" id="osField">
+          <option value="">Select OS…</option>
+          <option>Windows 11</option>
+          <option>Windows 10</option>
+          <option>macOS Sonoma</option>
+          <option>macOS Ventura</option>
+          <option>Ubuntu / Linux</option>
+          <option>iOS</option>
+          <option>Android</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- SUBMIT -->
+    <button class="submit-btn" onclick="submitReport()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Submit Bug Report
+    </button>
+
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successView">
+    <div class="success-icon-wrap">✅</div>
+    <h2>Report Submitted!</h2>
+    <p>Thank you for helping us improve. Our engineering team will review your report within 24–48 hours.</p>
+    <div class="ticket-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Ticket ID: #BUG-<span id="ticketNum"></span>
+    </div>
+    <div class="success-actions">
+      <a class="action-btn" href="javascript:history.back()">← Back to App</a>
+      <div class="action-btn" onclick="resetForm()">Submit Another</div>
+      <a class="action-btn" href="help-center.html">Help Center</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>© 2025 AI Assistant &nbsp;·&nbsp;
+    <a href="help-center.html">Help Center</a>
+    <a href="release-notes.html">Release Notes</a>
+    <a href="terms-policies.html">Terms</a>
+  </p>
+</div>
+
+<script>
+  function selectCat(el) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  let curSev = 'med';
+  function selectSev(level) {
+    ['low','med','high'].forEach(l => {
+      document.getElementById('sev-' + l).className = 'sev-btn';
+    });
+    document.getElementById('sev-' + level).className = 'sev-btn active-' + level;
+    curSev = level;
+  }
+
+  
+    const _RB_SB_URL  = 'https://lnnhtzbiegeesemspoqf.supabase.co';
+    const _RB_SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxubmh0emJpZWdlZXNlbXNwb3FmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTQ1NDAsImV4cCI6MjA4ODk3MDU0MH0.340j-wcvkpDhY3ZQMuWsJ-HEfCdBpuyciQ2GWMCEgNw';
+    const _rbSb = window.supabase ? window.supabase.createClient(_RB_SB_URL, _RB_SB_ANON) : null;
+
+    function submitReport() {
+    const title = document.getElementById('bugTitle').value.trim();
+    const steps = document.getElementById('stepsField').value.trim();
+    if (!title) { document.getElementById('bugTitle').focus(); shake(document.getElementById('bugTitle')); return; }
+    if (!steps) { document.getElementById('stepsField').focus(); shake(document.getElementById('stepsField')); return; }
+    const ticketNum = Math.floor(10000 + Math.random() * 90000);
+    document.getElementById('ticketNum').textContent = ticketNum;
+    // Save to Supabase
+    if (_rbSb) {
+      const cat = document.querySelector('.cat-btn.active')?.dataset?.cat || 'general';
+      const sev = document.querySelector('.sev-btn.active')?.dataset?.sev || 'med';
+      const desc = document.getElementById('stepsField').value.trim();
+      const bugTitle = document.getElementById('bugTitle').value.trim();
+      _rbSb.from('bug_reports').insert([{
+        ticket: ticketNum, category: cat, severity: sev,
+        title: bugTitle, description: desc,
+        url: location.href, ts: Date.now()
+      }]).then(function(){}).catch(function(){});
+    }
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetForm() {
+    document.getElementById('bugTitle').value = '';
+    document.getElementById('stepsField').value = '';
+    document.getElementById('behaviorField').value = '';
+    document.getElementById('browserField').value = '';
+    document.getElementById('osField').value = '';
+    selectSev('med');
+    document.getElementById('formView').style.display = 'block';
+    document.getElementById('successView').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function shake(el) {
+    el.style.animation = 'none';
+    el.style.borderColor = 'rgba(248,113,113,0.5)';
+    setTimeout(() => { el.style.borderColor = ''; }, 1200);
+  }
+</script>
+</body>
+</html>

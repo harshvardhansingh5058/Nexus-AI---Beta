@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Latest updates and release notes for Nexus.">
+  <meta property="og:title" content="What's New – Nexus">
+  <meta property="og:description" content="Latest updates and release notes for Nexus.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="What's New – Nexus">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%235b5bd6'/><text y='.9em' font-size='72' x='14' font-family='Arial' font-weight='bold' fill='white'>N</text></svg>">
+  <meta name="theme-color" content="#5b5bd6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Release Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #0a0a0a;
+      --border: rgba(255,255,255,0.08);
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+      --text-muted: #555;
+    }
+    html, body { font-family: 'Sora', sans-serif; background: var(--bg-main); color: var(--text-primary); }
+    body { overflow-x: hidden; }
+
+    /* TOPBAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .logo-box {
+      width: 30px; height: 30px; background: #fff; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #000; flex-shrink: 0;
+    }
+    .brand-name { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
+    .back-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 14px; border-radius: 9px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+      color: var(--text-secondary); font-family: 'Sora', sans-serif;
+      font-size: 12.5px; font-weight: 500; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+
+    /* HERO */
+    .hero {
+      padding: 64px 28px 48px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      margin-bottom: 20px; letter-spacing: 0.4px;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 14px; }
+    .hero p { font-size: 15px; color: var(--text-secondary); max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+    /* LAYOUT */
+    .layout {
+      display: flex; max-width: 1040px; margin: 0 auto;
+      padding: 48px 28px 80px; gap: 48px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 200px; flex-shrink: 0;
+      position: sticky; top: 76px; align-self: flex-start;
+    }
+    .sidebar-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .version-link {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 8px;
+      font-size: 12.5px; color: var(--text-secondary);
+      text-decoration: none; transition: all 0.2s;
+      margin-bottom: 1px; cursor: pointer;
+    }
+    .version-link:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .version-link.active { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+    .v-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .v-new    { background: #4ade80; }
+    .v-improve{ background: #60a5fa; }
+    .v-fix    { background: #fbbf24; }
+
+    /* CONTENT */
+    .content { flex: 1; min-width: 0; }
+
+    .release-block { margin-bottom: 52px; position: relative; padding-left: 26px; }
+    .release-block::before {
+      content: ''; position: absolute; left: 0; top: 9px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
+    }
+    .release-block::after {
+      content: ''; position: absolute; left: 4px; top: 23px;
+      width: 2px; bottom: -26px; background: var(--border);
+    }
+    .release-block:last-child::after { display: none; }
+
+    .release-meta {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;
+    }
+    .release-version { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .release-date {
+      font-size: 12px; color: var(--text-muted);
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .badge {
+      font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 100px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-new      { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .badge-improved { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .badge-fix      { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+
+    .release-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+    }
+    .release-item {
+      display: flex; gap: 14px; padding: 16px 20px;
+      border-bottom: 1px solid var(--border); transition: background 0.15s;
+    }
+    .release-item:last-child { border-bottom: none; }
+    .release-item:hover { background: rgba(255,255,255,0.025); }
+    .item-type-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .item-body strong { display: block; font-size: 13.5px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+    .item-body p { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+
+    /* FOOTER */
+    .page-footer {
+      border-top: 1px solid var(--border); padding: 28px; text-align: center;
+      color: var(--text-muted); font-size: 12px;
+    }
+    .page-footer a { color: var(--text-muted); text-decoration: none; margin: 0 10px; transition: color 0.2s; }
+    .page-footer a:hover { color: var(--text-secondary); }
+
+    @media(max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-box">A</div>
+    <span class="brand-name">Release Notes</span>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><div class="live-dot"></div>Live Updates</div>
+  <h1>What's New</h1>
+  <p>Latest updates, improvements, and bug fixes to the AI assistant platform.</p>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-label">Versions</div>
+    <a class="version-link active" href="#v24"><div class="v-dot v-new"></div>v2.4 — March 2025</a>
+    <a class="version-link" href="#v23"><div class="v-dot v-improve"></div>v2.3 — Feb 2025</a>
+    <a class="version-link" href="#v22"><div class="v-dot v-fix"></div>v2.2 — Jan 2025</a>
+    <a class="version-link" href="#v21"><div class="v-dot v-new"></div>v2.1 — Dec 2024</a>
+    <a class="version-link" href="#v20"><div class="v-dot v-improve"></div>v2.0 — Nov 2024</a>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- v2.4 -->
+    <div class="release-block" id="v24">
+      <div class="release-meta">
+        <span class="release-version">Version 2.4</span>
+        <span class="release-date">March 2025</span>
+        <span class="badge badge-new">New</span>
+      </div>
+      <div class="release-card">
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#4ade80"></div>
+          <div class="item-body">
+            <strong>Image Understanding</strong>
+            <p>Upload and analyze images directly in the chat. Ask questions, get descriptions, extract text, or request edits to visuals.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#4ade80"></div>
+          <div class="item-body">
+            <strong>Persistent Memory</strong>
+            <p>The AI now remembers important details across conversations so you don't need to repeat context every session.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#60a5fa"></div>
+          <div class="item-body">
+            <strong>40% Faster Responses</strong>
+            <p>Improved inference pipeline delivers significantly faster response times for the majority of queries.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#60a5fa"></div>
+          <div class="item-body">
+            <strong>Redesigned Chat UI</strong>
+            <p>Cleaner, more spacious layout with improved message threading and better code block rendering.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v2.3 -->
+    <div class="release-block" id="v23">
+      <div class="release-meta">
+        <span class="release-version">Version 2.3</span>
+        <span class="release-date">February 2025</span>
+        <span class="badge badge-improved">Improved</span>
+      </div>
+      <div class="release-card">
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#60a5fa"></div>
+          <div class="item-body">
+            <strong>Enhanced Code Interpreter</strong>
+            <p>Supports data visualization, file uploads, and longer-running computations with live progress output.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#60a5fa"></div>
+          <div class="item-body">
+            <strong>Improved Reasoning Engine</strong>
+            <p>Significantly better performance on math, logic puzzles, and complex multi-step reasoning tasks.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#fbbf24"></div>
+          <div class="item-body">
+            <strong>Fixed: Conversation Context Drift</strong>
+            <p>Resolved an issue where long conversations caused the model to lose context from earlier in the thread.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v2.2 -->
+    <div class="release-block" id="v22">
+      <div class="release-meta">
+        <span class="release-version">Version 2.2</span>
+        <span class="release-date">January 2025</span>
+        <span class="badge badge-fix">Bug Fixes</span>
+      </div>
+      <div class="release-card">
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#fbbf24"></div>
+          <div class="item-body">
+            <strong>Fixed: Mobile Keyboard Scroll</strong>
+            <p>Resolved scrolling and layout issues when the keyboard appears on iOS and Android devices.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#fbbf24"></div>
+          <div class="item-body">
+            <strong>Fixed: Syntax Highlighting</strong>
+            <p>Code highlighting now correctly renders for Python, Rust, Go, TypeScript, and Swift.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#60a5fa"></div>
+          <div class="item-body">
+            <strong>UI Polish</strong>
+            <p>Smoother animations, improved dark mode contrast ratios, and refined micro-interactions throughout.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v2.1 -->
+    <div class="release-block" id="v21">
+      <div class="release-meta">
+        <span class="release-version">Version 2.1</span>
+        <span class="release-date">December 2024</span>
+        <span class="badge badge-new">New</span>
+      </div>
+      <div class="release-card">
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#4ade80"></div>
+          <div class="item-body">
+            <strong>Custom Instructions</strong>
+            <p>Set persistent instructions that apply to every conversation — define preferred tone, format, or role behavior.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#4ade80"></div>
+          <div class="item-body">
+            <strong>Plugin & Tool Support</strong>
+            <p>Connect third-party tools directly in the chat including web search, calculators, and external APIs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v2.0 -->
+    <div class="release-block" id="v20">
+      <div class="release-meta">
+        <span class="release-version">Version 2.0</span>
+        <span class="release-date">November 2024</span>
+        <span class="badge badge-improved">Major Release</span>
+      </div>
+      <div class="release-card">
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#4ade80"></div>
+          <div class="item-body">
+            <strong>Complete Rebuild</strong>
+            <p>Ground-up redesign of the platform with new model architecture, lower latency, and higher quality outputs.</p>
+          </div>
+        </div>
+        <div class="release-item">
+          <div class="item-type-dot" style="background:#60a5fa"></div>
+          <div class="item-body">
+            <strong>GPT Builder</strong>
+            <p>Create and share custom AI assistants tailored to specific tasks using the new GPT creation interface.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  <p>© 2025 AI Assistant &nbsp;·&nbsp;
+    <a href="help-center.html">Help Center</a>
+    <a href="terms-policies.html">Terms</a>
+    <a href="report-bug.html">Report Bug</a>
+  </p>
+</div>
+
+</body>
+</html>

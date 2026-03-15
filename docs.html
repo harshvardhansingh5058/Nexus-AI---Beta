@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Nexus developer documentation and API reference.">
+  <meta property="og:title" content="Docs – Nexus">
+  <meta property="og:description" content="Nexus developer documentation and API reference.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Docs – Nexus">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%235b5bd6'/><text y='.9em' font-size='72' x='14' font-family='Arial' font-weight='bold' fill='white'>N</text></svg>">
+  <meta name="theme-color" content="#5b5bd6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus — Developer Documentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f0f0;
+      --text2: #a0a0a8;
+      --text3: #555560;
+      --accent: #10a37f;
+      --warn: #f59e0b;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Sora', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Top header bar ── */
+    .site-header {
+      display: flex; align-items: center;
+      padding: 0 24px;
+      height: 52px;
+      border-bottom: 1px solid var(--border);
+      background: #0d0d0d;
+      flex-shrink: 0;
+      gap: 20px;
+      position: relative;
+      z-index: 10;
+    }
+    .site-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .site-logo-mark {
+      width: 28px; height: 28px; background: #fff;
+      border-radius: 7px; display: flex; align-items: center;
+      justify-content: center; font-size: 13px;
+      font-weight: 700; color: #000;
+    }
+    .site-logo-name {
+      font-size: 14px; font-weight: 600; color: var(--text);
+      letter-spacing: -0.2px;
+    }
+    .site-logo-badge {
+      font-size: 10px; color: var(--text3);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .header-search {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 14px;
+      transition: border-color 0.2s;
+      width: 220px;
+    }
+    .header-search:focus-within { border-color: rgba(255,255,255,0.2); }
+    .header-search svg { color: var(--text3); flex-shrink: 0; }
+    .header-search input {
+      background: transparent; border: none; outline: none;
+      font-family: 'Sora', sans-serif; font-size: 12.5px;
+      color: var(--text); width: 100%;
+    }
+    .header-search input::placeholder { color: var(--text3); }
+    /* Search results in sidebar */
+    .nav-item.hidden { display: none; }
+    .nav-section.hidden { display: none; }
+    .no-doc-results {
+      padding: 20px; font-size: 12px; color: var(--text3);
+      text-align: center; display: none;
+    }
+    .no-doc-results.visible { display: block; }
+    .header-back {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12.5px; color: var(--text2);
+      text-decoration: none; padding: 5px 10px;
+      border-radius: 7px; border: 1px solid var(--border);
+      transition: all 0.2s; background: transparent; cursor: pointer;
+    }
+    .header-back:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+
+    /* ── Main layout ── */
+    .layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px; min-width: 240px;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+      padding: 8px 0 40px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.06) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 4px; }
+    .nav-section {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.4px;
+      color: var(--text3); padding: 18px 20px 5px;
+    }
+    .nav-item {
+      display: flex; align-items: center;
+      padding: 7px 20px 7px 18px;
+      font-size: 13px; color: var(--text2);
+      cursor: pointer; transition: all 0.14s;
+      border-left: 2px solid transparent;
+      user-select: none; line-height: 1.5;
+      border-radius: 0;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active {
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border-left-color: rgba(255,255,255,0.45);
+      font-weight: 500;
+    }
+
+    /* ── Content area ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 52px 72px 100px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.05) transparent;
+    }
+    .content::-webkit-scrollbar { width: 4px; }
+    .content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 4px; }
+
+    /* ── Page ── */
+    .page { display: none; max-width: 740px; animation: fadeUp 0.25s ease both; }
+    .page.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Typography ── */
+    .page-title {
+      font-size: 32px; font-weight: 700;
+      color: var(--text); letter-spacing: -0.7px;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .page-lead {
+      font-size: 15px; color: var(--text2);
+      line-height: 1.75; margin-bottom: 44px;
+      font-weight: 300; max-width: 580px;
+    }
+    h2 {
+      font-size: 15px; font-weight: 600;
+      color: var(--text); margin: 40px 0 12px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    p {
+      font-size: 13.5px; color: var(--text2);
+      line-height: 1.78; margin-bottom: 16px;
+    }
+    .ic {
+      font-family: 'Courier New', monospace;
+      font-size: 12px; color: #89b4fa;
+      background: rgba(137,180,250,0.08);
+      padding: 1px 6px; border-radius: 4px;
+    }
+
+    /* ── Shortcut cards ── */
+    .shortcuts {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin-bottom: 0;
+    }
+    .card {
+      padding: 22px 24px 20px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; cursor: pointer;
+      transition: all 0.18s;
+    }
+    .card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-1px);
+    }
+    .card-icon {
+      width: 34px; height: 34px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text3);
+    }
+    .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 7px; }
+    .card-desc { font-size: 12.5px; color: var(--text3); line-height: 1.6; margin-bottom: 16px; }
+    .card-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; color: rgba(255,255,255,0.25);
+    }
+
+    /* ── Code block ── */
+    .code {
+      background: #0d0d10;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px; padding: 18px 22px;
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px; color: #cdd6f4;
+      line-height: 1.75; margin: 14px 0 22px;
+      overflow-x: auto; position: relative;
+      white-space: pre;
+    }
+    .code .lang {
+      position: absolute; top: 10px; right: 14px;
+      font-size: 9.5px; color: var(--text3);
+      font-family: 'Sora', sans-serif;
+      text-transform: uppercase; letter-spacing: 1.2px;
+    }
+    .code .kw { color: #cba6f7; }
+    .code .str { color: #a6e3a1; }
+    .code .num { color: #fab387; }
+    .code .fn { color: #89b4fa; }
+    .code .cm { color: #45475a; }
+
+    /* ── Callout ── */
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 18px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      margin: 14px 0 22px;
+    }
+    .callout.tip { border-left: 3px solid var(--accent); }
+    .callout.warn { border-left: 3px solid var(--warn); }
+    .callout p { font-size: 13px; color: var(--text2); line-height: 1.6; margin: 0; }
+    .callout svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 28px; font-size: 13px; }
+    th {
+      text-align: left; padding: 9px 14px;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text3);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    td {
+      padding: 12px 14px; color: var(--text2);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top; line-height: 1.55;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+    .tm { font-family: 'Courier New', monospace; color: #89b4fa; font-size: 12px; }
+    .tt { font-family: 'Courier New', monospace; color: #fab387; font-size: 12px; }
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 4px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .req { background: rgba(239,68,68,0.1); color: #f87171; }
+    .opt { background: rgba(255,255,255,0.05); color: var(--text3); }
+
+    /* ── Endpoint pill ── */
+    .ep {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 10px 18px; border-radius: 9px;
+      font-family: 'Courier New', monospace; font-size: 13px;
+      margin-bottom: 20px; width: 100%;
+      background: rgba(16,163,127,0.06);
+      border: 1px solid rgba(16,163,127,0.16);
+    }
+    .ep .verb {
+      font-weight: 700; font-size: 11px; letter-spacing: 1px;
+      padding: 3px 9px; border-radius: 5px;
+      background: rgba(16,163,127,0.18); color: var(--accent);
+    }
+    .ep .path { color: var(--text2); }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 40px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="site-header">
+    <a class="site-logo" href="#">
+      <div class="site-logo-mark">S</div>
+      <span class="site-logo-name">Nexus</span>
+    </a>
+    <span class="site-logo-badge">Developers</span>
+
+    <div class="header-search">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="docsSearch" placeholder="Search documentation..." oninput="docsSearch(this.value)" onkeydown="if(event.key==='Escape')docsSearch('')">
+    </div>
+
+    <button class="header-back" onclick="window.close()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to App
+    </button>
+  </header>
+
+  <!-- Main layout -->
+  <div class="layout">
+
+    <!-- Sidebar nav -->
+    <nav class="sidebar">
+      <div class="nav-section">Getting Started</div>
+      <div class="nav-item active" data-page="home">Overview</div>
+      <div class="nav-item" data-page="quickstart">Quick Start</div>
+      <div class="nav-item" data-page="auth">Authorization</div>
+
+      <div class="nav-section">Schema</div>
+      <div class="nav-item" data-page="location">Location</div>
+      <div class="nav-item" data-page="version">Version</div>
+      <div class="nav-item" data-page="http">HTTP Verbs</div>
+      <div class="nav-item" data-page="errors">Error Messages</div>
+
+      <div class="nav-section">API Reference</div>
+      <div class="nav-item" data-page="search">Search Photos</div>
+      <div class="nav-item" data-page="random">Get a Random Photo</div>
+      <div class="nav-item" data-page="list">List Photos</div>
+      <div class="nav-item" data-page="pagination">Pagination</div>
+
+      <div class="nav-section">Resources</div>
+      <div class="nav-item" data-page="rate">Rate Limiting</div>
+      <div class="nav-item" data-page="guidelines">Guidelines &amp; Crediting</div>
+      <div class="nav-item" data-page="deprecation">Deprecation Policy</div>
+      <div class="nav-item" data-page="changelog">Changelog</div>
+    </nav>
+
+    <div class="no-doc-results" id="noDocResults">No results found</div>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- OVERVIEW -->
+      <div class="page active" id="p-home">
+        <h1 class="page-title">Quick shortcuts</h1>
+        <p class="page-lead">Everything you need to integrate the Nexus API. Follow the instructions to register as a developer, then explore the endpoints below.</p>
+        <div class="shortcuts">
+          <div class="card" onclick="nav('quickstart')">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="card-title">Setting up an application</div>
+            <div class="card-desc">Follow the instructions to register as a developer and set up your application. When ready, apply for a higher rate limit.</div>
+            <span class="card-link">Jump to documentation <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+          <div class="card" onclick="nav('search')">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div class="card-title">Search photos by keyword</div>
+            <div class="card-desc">Search using powerful image search powered by millions of community tags and advanced image recognition.</div>
+            <span class="card-link">Jump to documentation <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+          <div class="card" onclick="nav('random')">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            </div>
+            <div class="card-title">Get a random photo</div>
+            <div class="card-desc">Populate your app with a random photo, narrowed by search term, orientation, collection, or user.</div>
+            <span class="card-link">Jump to documentation <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+          <div class="card" onclick="nav('list')">
+            <div class="card-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="card-title">List new photos</div>
+            <div class="card-desc">Every day hundreds of new photos are released. Grab an always-updating list to give users fresh options.</div>
+            <span class="card-link">Jump to documentation <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK START -->
+      <div class="page" id="p-quickstart">
+        <h1 class="page-title">Quick Start</h1>
+        <p class="page-lead">Get up and running in minutes. Register your app, grab your Client ID, and make your first request.</p>
+        <h2>1. Create a developer account</h2>
+        <p>Sign up at the developer portal to access your dashboard. Once your account is verified you can register applications and generate access credentials.</p>
+        <h2>2. Register your application</h2>
+        <p>Each application gets a unique <span class="ic">client_id</span> and <span class="ic">client_secret</span>. The <span class="ic">client_id</span> is used for public requests; the <span class="ic">client_secret</span> is used for OAuth flows only.</p>
+        <h2>3. Make your first request</h2>
+        <div class="code"><span class="lang">bash</span><span class="kw">curl</span> -H <span class="str">"Authorization: Client-ID YOUR_CLIENT_ID"</span> \
+  <span class="str">"https://api.yourapp.com/v1/photos"</span></div>
+        <div class="callout tip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10a37f" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>Keep your <span class="ic">client_secret</span> private. Never expose it in client-side code or public repositories.</p>
+        </div>
+      </div>
+
+      <!-- AUTHORIZATION -->
+      <div class="page" id="p-auth">
+        <h1 class="page-title">Authorization</h1>
+        <p class="page-lead">The API supports public authentication for read-only access and OAuth 2.0 for user-specific actions.</p>
+        <h2>Public Authentication</h2>
+        <p>For read-only endpoints, pass your <span class="ic">client_id</span> via the HTTP Authorization header.</p>
+        <div class="code"><span class="lang">http</span>Authorization: Client-ID <span class="str">YOUR_CLIENT_ID</span></div>
+        <h2>User Authentication (OAuth 2.0)</h2>
+        <p>To act on behalf of a user, redirect them to the authorization URL. After approval you'll receive a code to exchange for an access token.</p>
+        <div class="code"><span class="lang">http</span><span class="kw">GET</span> https://yourapp.com/oauth/authorize
+  ?client_id=<span class="str">YOUR_CLIENT_ID</span>
+  &amp;redirect_uri=<span class="str">YOUR_REDIRECT_URI</span>
+  &amp;response_type=<span class="num">code</span>
+  &amp;scope=<span class="str">public+write_likes</span></div>
+        <div class="callout warn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p>Access tokens expire after 1 hour. Use the refresh token to silently obtain a new one without re-prompting the user.</p>
+        </div>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="page" id="p-location">
+        <h1 class="page-title">Location</h1>
+        <p class="page-lead">All API requests are made to the following base URL. Requests must be made over HTTPS.</p>
+        <div class="code">https://api.yourapp.com</div>
+        <p>Prefix all endpoint paths with <span class="ic">/v1</span>. For example, <span class="ic">GET /v1/photos</span>.</p>
+      </div>
+
+      <!-- VERSION -->
+      <div class="page" id="p-version">
+        <h1 class="page-title">Version</h1>
+        <p class="page-lead">The current stable version of the API is <span class="ic">v1</span>, specified in the URL path.</p>
+        <p>When a breaking change is introduced, a new version will be released alongside a migration guide. Old versions are supported for a minimum of 6 months after deprecation is announced.</p>
+      </div>
+
+      <!-- HTTP VERBS -->
+      <div class="page" id="p-http">
+        <h1 class="page-title">HTTP Verbs</h1>
+        <p class="page-lead">The API uses standard HTTP verbs to indicate the type of action being performed.</p>
+        <table>
+          <thead><tr><th>Verb</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">GET</td><td>Used for retrieving resources.</td></tr>
+            <tr><td class="tm">POST</td><td>Used for creating resources or performing actions.</td></tr>
+            <tr><td class="tm">PUT</td><td>Used for replacing resources or collections.</td></tr>
+            <tr><td class="tm">DELETE</td><td>Used for deleting resources.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ERROR MESSAGES -->
+      <div class="page" id="p-errors">
+        <h1 class="page-title">Error Messages</h1>
+        <p class="page-lead">The API uses conventional HTTP response codes. Errors return a JSON body with a human-readable message.</p>
+        <div class="code"><span class="lang">json</span>{
+  <span class="str">"errors"</span>: [<span class="str">"OAuth error: The access token is invalid"</span>]
+}</div>
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">200</td><td>OK — Request succeeded.</td></tr>
+            <tr><td class="tm">400</td><td>Bad Request — Missing or invalid parameters.</td></tr>
+            <tr><td class="tm">401</td><td>Unauthorized — Missing or invalid credentials.</td></tr>
+            <tr><td class="tm">403</td><td>Forbidden — Access denied to this resource.</td></tr>
+            <tr><td class="tm">404</td><td>Not Found — The resource doesn't exist.</td></tr>
+            <tr><td class="tm">429</td><td>Too Many Requests — Rate limit exceeded.</td></tr>
+            <tr><td class="tm">500</td><td>Internal Server Error — Something went wrong on our end.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SEARCH PHOTOS -->
+      <div class="page" id="p-search">
+        <h1 class="page-title">Search Photos</h1>
+        <p class="page-lead">Search for photos by keyword. Returns a paginated list of results matching your query and applied filters.</p>
+        <div class="ep"><span class="verb">GET</span><span class="path">/v1/search/photos</span></div>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Param</th><th>Type</th><th></th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">query</td><td class="tt">string</td><td><span class="badge req">Required</span></td><td>Search terms.</td></tr>
+            <tr><td class="tm">page</td><td class="tt">integer</td><td><span class="badge opt">Optional</span></td><td>Page number to retrieve. (default: 1)</td></tr>
+            <tr><td class="tm">per_page</td><td class="tt">integer</td><td><span class="badge opt">Optional</span></td><td>Number of items per page. (default: 10, max: 30)</td></tr>
+            <tr><td class="tm">orientation</td><td class="tt">string</td><td><span class="badge opt">Optional</span></td><td>Filter by orientation: <span class="ic">landscape</span>, <span class="ic">portrait</span>, <span class="ic">squarish</span></td></tr>
+            <tr><td class="tm">color</td><td class="tt">string</td><td><span class="badge opt">Optional</span></td><td>Filter by color: <span class="ic">black_and_white</span>, <span class="ic">red</span>, <span class="ic">blue</span>, etc.</td></tr>
+          </tbody>
+        </table>
+        <h2>Example Request</h2>
+        <div class="code"><span class="lang">bash</span><span class="kw">curl</span> -H <span class="str">"Authorization: Client-ID YOUR_CLIENT_ID"</span> \
+  <span class="str">"https://api.yourapp.com/v1/search/photos?query=mountains&amp;per_page=5"</span></div>
+      </div>
+
+      <!-- RANDOM PHOTO -->
+      <div class="page" id="p-random">
+        <h1 class="page-title">Get a Random Photo</h1>
+        <p class="page-lead">Retrieve one or more random photos. Use optional parameters to narrow the pool.</p>
+        <div class="ep"><span class="verb">GET</span><span class="path">/v1/photos/random</span></div>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Param</th><th>Type</th><th></th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">query</td><td class="tt">string</td><td><span class="badge opt">Optional</span></td><td>Limit to photos matching this search term.</td></tr>
+            <tr><td class="tm">orientation</td><td class="tt">string</td><td><span class="badge opt">Optional</span></td><td>Filter by orientation.</td></tr>
+            <tr><td class="tm">collections</td><td class="tt">string</td><td><span class="badge opt">Optional</span></td><td>Comma-separated collection IDs to filter by.</td></tr>
+            <tr><td class="tm">count</td><td class="tt">integer</td><td><span class="badge opt">Optional</span></td><td>Number of photos to return. (max: 30)</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10a37f" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>When <span class="ic">count</span> is greater than 1, the response is an array of photo objects rather than a single object.</p>
+        </div>
+      </div>
+
+      <!-- LIST PHOTOS -->
+      <div class="page" id="p-list">
+        <h1 class="page-title">List New Photos</h1>
+        <p class="page-lead">Get a paginated list of the latest photos. Updated daily.</p>
+        <div class="ep"><span class="verb">GET</span><span class="path">/v1/photos</span></div>
+        <h2>Parameters</h2>
+        <table>
+          <thead><tr><th>Param</th><th>Type</th><th></th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">page</td><td class="tt">integer</td><td><span class="badge opt">Optional</span></td><td>Page number. (default: 1)</td></tr>
+            <tr><td class="tm">per_page</td><td class="tt">integer</td><td><span class="badge opt">Optional</span></td><td>Items per page. (default: 10, max: 30)</td></tr>
+            <tr><td class="tm">order_by</td><td class="tt">string</td><td><span class="badge opt">Optional</span></td><td>Sort order: <span class="ic">latest</span>, <span class="ic">oldest</span>, or <span class="ic">popular</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="page" id="p-pagination">
+        <h1 class="page-title">Pagination Headers</h1>
+        <p class="page-lead">Paginated responses include standard HTTP link headers so you can navigate between pages programmatically.</p>
+        <table>
+          <thead><tr><th>Header</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">X-Total</td><td>Total number of items across all pages.</td></tr>
+            <tr><td class="tm">X-Per-Page</td><td>Number of items returned per page.</td></tr>
+            <tr><td class="tm">X-Page</td><td>Current page number.</td></tr>
+            <tr><td class="tm">Link</td><td>Contains <span class="ic">prev</span>, <span class="ic">next</span>, <span class="ic">first</span>, and <span class="ic">last</span> page URLs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RATE LIMITING -->
+      <div class="page" id="p-rate">
+        <h1 class="page-title">Rate Limiting</h1>
+        <p class="page-lead">The API rate limits requests to ensure fair usage. Current limits are shown in the response headers of every request.</p>
+        <table>
+          <thead><tr><th>Plan</th><th>Requests / hour</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">Demo</td><td>50</td><td>Development &amp; testing only. Not for production use.</td></tr>
+            <tr><td class="tm">Standard</td><td>5,000</td><td>Default after app approval.</td></tr>
+            <tr><td class="tm">Production</td><td>Custom</td><td>Apply after launching publicly.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p>When exceeded, the API returns <span class="ic">429 Too Many Requests</span>. Check the <span class="ic">X-Ratelimit-Reset</span> header for when your limits reset.</p>
+        </div>
+        <h2>Rate Limit Headers</h2>
+        <table>
+          <thead><tr><th>Header</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="tm">X-Ratelimit-Limit</td><td>Maximum requests allowed per hour.</td></tr>
+            <tr><td class="tm">X-Ratelimit-Remaining</td><td>Requests remaining in the current window.</td></tr>
+            <tr><td class="tm">X-Ratelimit-Reset</td><td>Unix timestamp when the limit resets.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GUIDELINES -->
+      <div class="page" id="p-guidelines">
+        <h1 class="page-title">Guidelines &amp; Crediting</h1>
+        <p class="page-lead">Follow these guidelines in your production application to keep your API access in good standing.</p>
+        <h2>Attribution</h2>
+        <p>You must credit the photographer and Nexus wherever photos appear in your application. This includes displaying the photographer's name and linking back to their profile page.</p>
+        <h2>Hotlinking</h2>
+        <p>You may hotlink images directly from the CDN URLs returned by the API. Do not re-host or redistribute photos in bulk outside of standard caching.</p>
+        <h2>Prohibited Uses</h2>
+        <p>You may not use the API to create a service that directly competes with Nexus, sell or redistribute access to the API, or use photos in ways that violate photographer rights.</p>
+        <div class="callout tip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10a37f" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>Apps that do not follow attribution guidelines may have their API access suspended after a warning is issued.</p>
+        </div>
+      </div>
+
+      <!-- DEPRECATION POLICY -->
+      <div class="page" id="p-deprecation">
+        <h1 class="page-title">Deprecation Policy</h1>
+        <p class="page-lead">We provide at least 6 months' notice before removing or making breaking changes to any API endpoint.</p>
+        <h2>How We Notify You</h2>
+        <p>Deprecated endpoints return a <span class="ic">Deprecation</span> response header containing the planned removal date. We also post announcements to the developer changelog and send email notifications to affected application owners.</p>
+        <h2>Current Deprecations</h2>
+        <p style="color:var(--text3)">No active deprecations at this time.</p>
+      </div>
+
+      <!-- CHANGELOG -->
+      <div class="page" id="p-changelog">
+        <h1 class="page-title">Changelog</h1>
+        <p class="page-lead">A record of all notable changes to the API. We follow semantic versioning.</p>
+        <h2>v1.0.0 — Initial Release</h2>
+        <p>Public launch of the v1 API. Includes search, random photo, list photos, and OAuth 2.0 authentication.</p>
+        <div class="callout tip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10a37f" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>Subscribe to developer updates by registering your email in the developer portal.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function nav(pageId) {
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.page === pageId);
+      });
+      document.querySelectorAll('.page').forEach(el => {
+        el.classList.toggle('active', el.id === 'p-' + pageId);
+      });
+      document.querySelector('.content').scrollTop = 0;
+    }
+
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.addEventListener('click', () => nav(el.dataset.page));
+    });
+
+    // ===== DOCS SEARCH =====
+    function docsSearch(val) {
+      const q = val.trim().toLowerCase();
+      const input = document.getElementById('docsSearch');
+      if (input) input.value = val;
+
+      const items    = document.querySelectorAll('.nav-item');
+      const sections = document.querySelectorAll('.nav-section');
+      let anyVisible = false;
+
+      if (!q) {
+        items.forEach(el => el.classList.remove('hidden'));
+        sections.forEach(el => el.classList.remove('hidden'));
+        document.getElementById('noDocResults').classList.remove('visible');
+        return;
+      }
+
+      // Hide/show nav items
+      items.forEach(el => {
+        const match = el.textContent.toLowerCase().includes(q);
+        el.classList.toggle('hidden', !match);
+        if (match) anyVisible = true;
+      });
+
+      // Hide section labels that have no visible children
+      sections.forEach(section => {
+        let sibling = section.nextElementSibling;
+        let hasVisible = false;
+        while (sibling && !sibling.classList.contains('nav-section')) {
+          if (!sibling.classList.contains('hidden')) hasVisible = true;
+          sibling = sibling.nextElementSibling;
+        }
+        section.classList.toggle('hidden', !hasVisible);
+      });
+
+      document.getElementById('noDocResults').classList.toggle('visible', !anyVisible);
+    }
+
+    // Ctrl+K / ⌘K focus search
+    document.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('docsSearch')?.focus();
+      }
+    });
+  </script>
+
+</body>
+</html>

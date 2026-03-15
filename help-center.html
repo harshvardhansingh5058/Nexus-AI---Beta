@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Get help and support for Nexus AI Chat.">
+  <meta property="og:title" content="Help Center – Nexus">
+  <meta property="og:description" content="Get help and support for Nexus AI Chat.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Help Center – Nexus">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%235b5bd6'/><text y='.9em' font-size='72' x='14' font-family='Arial' font-weight='bold' fill='white'>N</text></svg>">
+  <meta name="theme-color" content="#5b5bd6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #0a0a0a;
+      --bg-sidebar: #0f0f0f;
+      --bg-input: #18181b;
+      --border: rgba(255,255,255,0.08);
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+      --text-muted: #555;
+    }
+    html, body { height: 100%; font-family: 'Sora', sans-serif; background: var(--bg-main); color: var(--text-primary); }
+    body { overflow-x: hidden; }
+
+    /* TOPBAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .logo-box {
+      width: 30px; height: 30px; background: #fff; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #000; flex-shrink: 0;
+    }
+    .brand-name { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
+    .topbar-center {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .search-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 7px 14px; width: 340px;
+      transition: border-color 0.2s;
+    }
+    .search-bar:focus-within { border-color: rgba(255,255,255,0.2); }
+    .search-bar svg { flex-shrink: 0; opacity: 0.4; }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      color: var(--text-primary); font-family: 'Sora', sans-serif; font-size: 13px;
+      width: 100%;
+    }
+    .search-bar input::placeholder { color: var(--text-muted); }
+    .back-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 14px; border-radius: 9px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-secondary); font-family: 'Sora', sans-serif;
+      font-size: 12.5px; font-weight: 500; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+
+    /* HERO */
+    .hero {
+      padding: 72px 28px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      margin-bottom: 20px; letter-spacing: 0.4px;
+    }
+    .hero h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 14px; line-height: 1.1; }
+    .hero p { font-size: 15px; color: var(--text-secondary); max-width: 420px; margin: 0 auto 32px; line-height: 1.6; }
+    .hero-search {
+      display: flex; align-items: center; gap: 10px;
+      background: #111; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 14px 20px;
+      max-width: 520px; margin: 0 auto;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .hero-search:focus-within {
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
+    }
+    .hero-search svg { flex-shrink: 0; opacity: 0.35; }
+    .hero-search input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--text-primary); font-family: 'Sora', sans-serif; font-size: 14px;
+    }
+    .hero-search input::placeholder { color: var(--text-muted); }
+    .hero-search kbd {
+      font-size: 11px; padding: 2px 7px; border-radius: 5px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted); font-family: 'Sora', sans-serif;
+    }
+
+    /* CONTAINER */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 28px 80px; }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted); margin-bottom: 14px;
+    }
+
+    /* POPULAR ARTICLES */
+    .popular-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px; margin-bottom: 52px;
+    }
+    .pop-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; border-radius: 10px;
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit;
+    }
+    .pop-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.13); }
+    .pop-icon {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0;
+    }
+    .pop-info { flex: 1; min-width: 0; }
+    .pop-info h4 { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pop-info span { font-size: 11px; color: var(--text-muted); }
+    .pop-arrow { color: var(--text-muted); font-size: 14px; }
+
+    /* TOPIC GRID */
+    .topics-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .topic-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; color: inherit;
+    }
+    .topic-card:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.13);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .topic-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+    .topic-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+    }
+    .ti-green { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.15); }
+    .ti-blue  { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.15); }
+    .ti-purple{ background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.15); }
+    .ti-orange{ background: rgba(251,191,36,0.1);  border: 1px solid rgba(251,191,36,0.15);  }
+    .ti-pink  { background: rgba(244,114,182,0.1); border: 1px solid rgba(244,114,182,0.15); }
+    .ti-cyan  { background: rgba(34,211,238,0.1);  border: 1px solid rgba(34,211,238,0.15);  }
+    .topic-info h3 { font-size: 14.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+    .topic-info p { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+    .topic-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .article-count { font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+    .topic-go { color: var(--text-muted); font-size: 13px; }
+
+    /* FOOTER */
+    .page-footer {
+      border-top: 1px solid var(--border);
+      padding: 28px;
+      text-align: center;
+      color: var(--text-muted); font-size: 12px;
+    }
+    .page-footer a { color: var(--text-muted); text-decoration: none; margin: 0 10px; transition: color 0.2s; }
+    .page-footer a:hover { color: var(--text-secondary); }
+    /* ARTICLE MODAL */
+    .article-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .article-overlay.open { opacity: 1; pointer-events: all; }
+    .article-modal {
+      width: 680px; max-width: 94vw; max-height: 85vh;
+      background: #0f0f0f; border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transform: translateY(16px) scale(0.97);
+      transition: transform 0.22s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+    }
+    .article-overlay.open .article-modal { transform: translateY(0) scale(1); }
+    .article-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px 14px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .article-modal-header h3 { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .article-modal-close {
+      width: 28px; height: 28px; border-radius: 7px;
+      background: none; border: 1px solid var(--border);
+      color: var(--text-secondary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .article-modal-close:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+    .article-modal-body {
+      flex: 1; overflow-y: auto; padding: 24px 28px 32px;
+    }
+    .article-modal-body::-webkit-scrollbar { width: 4px; }
+    .article-modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+    .article-tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      padding: 3px 10px; border-radius: 100px;
+      background: rgba(255,255,255,0.06); color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .article-modal-body h4 { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .article-modal-body p { font-size: 13px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 12px; }
+    .article-modal-body ol, .article-modal-body ul { padding-left: 20px; margin-bottom: 12px; }
+    .article-modal-body li { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
+    .article-modal-body code {
+      background: rgba(255,255,255,0.07); padding: 2px 6px;
+      border-radius: 4px; font-family: monospace; font-size: 12px; color: #93c5fd;
+    }
+    .article-helpful {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border);
+      font-size: 12.5px; color: var(--text-muted);
+    }
+    .helpful-btn {
+      padding: 5px 14px; border-radius: 7px; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 12px;
+      border: 1px solid var(--border); background: none;
+      color: var(--text-secondary); transition: all 0.15s;
+    }
+    .helpful-btn:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+    .helpful-btn.yes:hover { border-color: rgba(74,222,128,0.3); color: #4ade80; }
+    .helpful-btn.no:hover  { border-color: rgba(239,68,68,0.3); color: #f87171; }
+
+    /* SEARCH RESULTS STATE */
+    .search-results-bar {
+      display: none; align-items: center; gap: 8px;
+      margin-bottom: 18px; font-size: 12px; color: var(--text-muted);
+    }
+    .search-results-bar.visible { display: flex; }
+    .search-clear {
+      margin-left: auto; padding: 4px 12px; border-radius: 6px;
+      background: none; border: 1px solid var(--border);
+      color: var(--text-muted); font-family: 'Sora', sans-serif;
+      font-size: 11.5px; cursor: pointer; transition: all 0.15s;
+    }
+    .search-clear:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .no-results {
+      display: none; text-align: center; padding: 60px 20px;
+      color: var(--text-muted); font-size: 14px;
+    }
+    .no-results.visible { display: block; }
+    .no-results svg { opacity: 0.2; margin-bottom: 16px; }
+    .no-results p { font-size: 13px; margin-top: 8px; }
+    /* Search highlight */
+    .search-highlight { background: rgba(255,255,255,0.15); border-radius: 2px; padding: 0 1px; }
+    /* Hide/show on search */
+    .section-label.hidden, .pop-card.hidden, .topic-card.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-box">S</div>
+    <span class="brand-name">Help Center</span>
+  </div>
+  <div class="topbar-center">
+    <div class="search-bar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="topbarSearch" placeholder="Search articles..." oninput="handleSearch(this.value)" onkeydown="searchKeydown(event)">
+    </div>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Support
+  </div>
+  <h1>How can we help you?</h1>
+  <p>Search our help articles or browse topics below to find answers quickly.</p>
+  <div class="hero-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="heroSearch" placeholder="Search for articles, guides, tips…" oninput="handleSearch(this.value)" onkeydown="searchKeydown(event)">
+    <kbd>⌘K</kbd>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- SEARCH STATE BAR -->
+  <div class="search-results-bar" id="searchResultsBar">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span id="searchResultsText">Showing results for ""</span>
+    <button class="search-clear" onclick="clearSearch()">✕ Clear</button>
+  </div>
+
+  <!-- NO RESULTS -->
+  <div class="no-results" id="noResults">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <div style="font-size:15px;font-weight:600;color:var(--text-secondary)">No results found</div>
+    <p>Try different keywords or browse topics below</p>
+  </div>
+
+  <!-- POPULAR -->
+  <div class="section-label" id="labelPopular">Popular Articles</div>
+  <div class="popular-grid" id="popularGrid">
+    <a class="pop-card" href="#" data-title="How to start a new chat" data-cat="Getting Started" data-article="getting-started" onclick="openArticle(event,'getting-started')">
+      <div class="pop-icon">💬</div>
+      <div class="pop-info"><h4>How to start a new chat</h4><span>Getting Started</span></div>
+      <span class="pop-arrow">›</span>
+    </a>
+    <a class="pop-card" href="#" data-title="Reset your password" data-cat="Account" data-article="reset-password" onclick="openArticle(event,'reset-password')">
+      <div class="pop-icon">🔑</div>
+      <div class="pop-info"><h4>Reset your password</h4><span>Account</span></div>
+      <span class="pop-arrow">›</span>
+    </a>
+    <a class="pop-card" href="#" data-title="Upgrade to Pro plan" data-cat="Billing" data-article="upgrade-pro" onclick="openArticle(event,'upgrade-pro')">
+      <div class="pop-icon">⚡</div>
+      <div class="pop-info"><h4>Upgrade to Pro plan</h4><span>Billing</span></div>
+      <span class="pop-arrow">›</span>
+    </a>
+    <a class="pop-card" href="#" data-title="Data privacy and security" data-cat="Privacy" data-article="privacy" onclick="openArticle(event,'privacy')">
+      <div class="pop-icon">🛡️</div>
+      <div class="pop-info"><h4>Data privacy &amp; security</h4><span>Privacy</span></div>
+      <span class="pop-arrow">›</span>
+    </a>
+    <a class="pop-card" href="#" data-title="API access and keys" data-cat="Developers" data-article="api-keys" onclick="openArticle(event,'api-keys')">
+      <div class="pop-icon">🔌</div>
+      <div class="pop-info"><h4>API access &amp; keys</h4><span>Developers</span></div>
+      <span class="pop-arrow">›</span>
+    </a>
+    <a class="pop-card" href="#" data-title="File and image upload guide" data-cat="Features" data-article="file-upload" onclick="openArticle(event,'file-upload')">
+      <div class="pop-icon">🖼️</div>
+      <div class="pop-info"><h4>File &amp; image upload guide</h4><span>Features</span></div>
+      <span class="pop-arrow">›</span>
+    </a>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="section-label" id="labelTopics">Browse by Topic</div>
+  <div class="topics-grid" id="topicsGrid">
+
+    <a class="topic-card" href="#" data-title="Getting Started" data-desc="Everything you need to start using the AI assistant effectively from day one." onclick="openArticle(event,'getting-started')">
+      <div class="topic-header">
+        <div class="topic-icon ti-green">🚀</div>
+        <div class="topic-info">
+          <h3>Getting Started</h3>
+          <p>Everything you need to start using the AI assistant effectively from day one.</p>
+        </div>
+      </div>
+      <div class="topic-footer">
+        <span class="article-count"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>12 articles</span>
+        <span class="topic-go">→</span>
+      </div>
+    </a>
+
+    <a class="topic-card" href="#" data-title="Account and Billing" data-desc="Manage your account, subscription plans, payment methods and invoices." onclick="openArticle(event,'upgrade-pro')">
+      <div class="topic-header">
+        <div class="topic-icon ti-blue">💳</div>
+        <div class="topic-info">
+          <h3>Account &amp; Billing</h3>
+          <p>Manage your account, subscription plans, payment methods and invoices.</p>
+        </div>
+      </div>
+      <div class="topic-footer">
+        <span class="article-count"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>18 articles</span>
+        <span class="topic-go">→</span>
+      </div>
+    </a>
+
+    <a class="topic-card" href="#" data-title="Features and Capabilities" data-desc="Explore everything the AI can do — writing, code, image generation, and more." onclick="openArticle(event,'file-upload')">
+      <div class="topic-header">
+        <div class="topic-icon ti-purple">✨</div>
+        <div class="topic-info">
+          <h3>Features &amp; Capabilities</h3>
+          <p>Explore everything the AI can do — writing, code, image generation, and more.</p>
+        </div>
+      </div>
+      <div class="topic-footer">
+        <span class="article-count"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>24 articles</span>
+        <span class="topic-go">→</span>
+      </div>
+    </a>
+
+    <a class="topic-card" href="#" data-title="API and Developers" data-desc="Integrate our AI into your applications with full API documentation and examples." onclick="openArticle(event,'api-keys')">
+      <div class="topic-header">
+        <div class="topic-icon ti-orange">🔌</div>
+        <div class="topic-info">
+          <h3>API &amp; Developers</h3>
+          <p>Integrate our AI into your applications with full API documentation and examples.</p>
+        </div>
+      </div>
+      <div class="topic-footer">
+        <span class="article-count"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>31 articles</span>
+        <span class="topic-go">→</span>
+      </div>
+    </a>
+
+    <a class="topic-card" href="#" data-title="Privacy and Safety" data-desc="Understand how we protect your data and ensure responsible AI use." onclick="openArticle(event,'privacy')">
+      <div class="topic-header">
+        <div class="topic-icon ti-pink">🛡️</div>
+        <div class="topic-info">
+          <h3>Privacy &amp; Safety</h3>
+          <p>Understand how we protect your data and ensure responsible AI use.</p>
+        </div>
+      </div>
+      <div class="topic-footer">
+        <span class="article-count"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>9 articles</span>
+        <span class="topic-go">→</span>
+      </div>
+    </a>
+
+    <a class="topic-card" href="#" data-title="Troubleshooting" data-desc="Fix common issues, unexpected errors, and resolve problems quickly." onclick="openArticle(event,'troubleshooting')">
+      <div class="topic-header">
+        <div class="topic-icon ti-cyan">🔧</div>
+        <div class="topic-info">
+          <h3>Troubleshooting</h3>
+          <p>Fix common issues, unexpected errors, and resolve problems quickly.</p>
+        </div>
+      </div>
+      <div class="topic-footer">
+        <span class="article-count"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>15 articles</span>
+        <span class="topic-go">→</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ARTICLE MODAL -->
+<div class="article-overlay" id="articleOverlay" onclick="closeArticleIfOutside(event)">
+  <div class="article-modal">
+    <div class="article-modal-header">
+      <h3 id="articleTitle">Article</h3>
+      <button class="article-modal-close" onclick="closeArticle()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="article-modal-body" id="articleBody"></div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <p>© 2025 [Startup Name] &nbsp;·&nbsp;
+    <a href="terms-policies.html">Terms</a>
+    <a href="release-notes.html">Release Notes</a>
+    <a href="report-bug.html">Report Bug</a>
+  </p>
+</div>
+
+<script>
+// ===== ARTICLE CONTENT =====
+const ARTICLES = {
+  'getting-started': {
+    title: 'How to start a new chat',
+    category: 'Getting Started',
+    content: `
+      <span class="article-tag">Getting Started</span>
+      <h4>Starting your first conversation</h4>
+      <p>To begin a new chat, click the <strong>New Chat</strong> button in the top-left sidebar, or press <code>Ctrl+N</code> (Windows) / <code>⌘N</code> (Mac).</p>
+      <h4>Choosing a model</h4>
+      <p>Before typing, you can select which AI model to use from the model picker in the input bar. Options include:</p>
+      <ul>
+        <li><strong>Auto</strong> — Automatically picks the best model for your query</li>
+        <li><strong>Fast</strong> — Quick responses for simple tasks</li>
+        <li><strong>Expert</strong> — Deeper reasoning for complex problems</li>
+      </ul>
+      <h4>Sending your first message</h4>
+      <p>Type your message in the input box and press <code>Enter</code> to send, or <code>Shift+Enter</code> to add a new line. You can also attach files by clicking the paperclip icon.</p>
+      <h4>Using prompt suggestions</h4>
+      <p>On the empty chat screen, you'll see quick prompt buttons like <strong>Summarize</strong>, <strong>Write code</strong>, and <strong>Explain</strong>. Click any of these to pre-fill the input with a starter prompt.</p>
+    `
+  },
+  'reset-password': {
+    title: 'Reset your password',
+    category: 'Account',
+    content: `
+      <span class="article-tag">Account</span>
+      <h4>Forgot your password?</h4>
+      <p>If you can't sign in, you can reset your password from the login screen by clicking <strong>Forgot password?</strong></p>
+      <h4>Step-by-step reset</h4>
+      <ol>
+        <li>Go to the login page and click <strong>Forgot password?</strong></li>
+        <li>Enter the email address linked to your account</li>
+        <li>Check your inbox for a reset email (check spam if not received within 2 minutes)</li>
+        <li>Click the reset link — it's valid for 30 minutes</li>
+        <li>Enter and confirm your new password</li>
+      </ol>
+      <h4>Password requirements</h4>
+      <p>Your new password must be at least 8 characters and include one uppercase letter, one number, and one special character.</p>
+      <h4>Still having trouble?</h4>
+      <p>If you don't receive the reset email or the link has expired, contact our support team via the <strong>Report a Bug</strong> page.</p>
+    `
+  },
+  'upgrade-pro': {
+    title: 'Upgrade to Pro plan',
+    category: 'Billing',
+    content: `
+      <span class="article-tag">Billing</span>
+      <h4>What's included in Pro?</h4>
+      <p>The Pro plan unlocks significantly higher usage limits and access to advanced models:</p>
+      <ul>
+        <li>2,000,000 tokens per month (vs 100,000 on Free)</li>
+        <li>Access to Expert and Heavy models</li>
+        <li>Priority response times</li>
+        <li>File uploads up to 50MB</li>
+        <li>Custom GPT creation and sharing</li>
+      </ul>
+      <h4>How to upgrade</h4>
+      <ol>
+        <li>Open <strong>Settings</strong> from the profile menu</li>
+        <li>Go to the <strong>Account</strong> tab</li>
+        <li>Click <strong>Upgrade to Pro</strong> next to your current plan</li>
+        <li>Complete payment via Stripe — all major cards accepted</li>
+      </ol>
+      <h4>Billing & cancellation</h4>
+      <p>Pro is billed monthly. You can cancel anytime from Settings → Account → Manage Subscription. Your access continues until the end of the current billing period.</p>
+    `
+  },
+  'privacy': {
+    title: 'Data privacy & security',
+    category: 'Privacy',
+    content: `
+      <span class="article-tag">Privacy</span>
+      <h4>What data do we collect?</h4>
+      <p>We collect your account information (name, email), conversation history (when enabled), and basic usage analytics to improve the service.</p>
+      <h4>Is my conversation data used for training?</h4>
+      <p>By default, your conversations may be used to improve our AI models. You can opt out at any time from <strong>Settings → Privacy & Security → Improve with my data</strong>.</p>
+      <h4>How is my data stored?</h4>
+      <p>All data is encrypted at rest (AES-256) and in transit (TLS 1.3). We use industry-standard cloud infrastructure with SOC 2 compliance.</p>
+      <h4>Deleting your data</h4>
+      <p>You can delete individual conversations from the sidebar, or delete all data from <strong>Settings → Data & Storage → Clear all history</strong>. To permanently delete your account and all data, go to <strong>Settings → Account → Delete Account</strong>.</p>
+    `
+  },
+  'api-keys': {
+    title: 'API access & keys',
+    category: 'Developers',
+    content: `
+      <span class="article-tag">Developers</span>
+      <h4>Getting your API key</h4>
+      <p>API access is available on Pro and above plans. To generate a key:</p>
+      <ol>
+        <li>Go to <strong>Settings → Advanced → API access</strong> and enable it</li>
+        <li>Visit the developer portal at <code>api.yourapp.com/dashboard</code></li>
+        <li>Click <strong>Generate new key</strong></li>
+        <li>Copy and store it securely — it's only shown once</li>
+      </ol>
+      <h4>Using your API key</h4>
+      <p>Pass your key in the Authorization header of every request:</p>
+      <p><code>Authorization: Bearer YOUR_API_KEY</code></p>
+      <h4>Rate limits</h4>
+      <p>API requests are subject to the same token limits as your plan. Pro accounts get 2M tokens/month shared across app and API usage.</p>
+      <h4>Revoking a key</h4>
+      <p>If your key is compromised, immediately revoke it from the developer portal and generate a new one. Old keys stop working instantly.</p>
+    `
+  },
+  'file-upload': {
+    title: 'File & image upload guide',
+    category: 'Features',
+    content: `
+      <span class="article-tag">Features</span>
+      <h4>Supported file types</h4>
+      <p>You can upload the following file types directly in the chat:</p>
+      <ul>
+        <li><strong>Images</strong> — JPG, PNG, WEBP, GIF (max 20MB)</li>
+        <li><strong>Documents</strong> — PDF, DOCX, TXT (max 20MB)</li>
+        <li><strong>Code files</strong> — .js, .py, .ts, .html, .css, and more</li>
+      </ul>
+      <h4>How to upload a file</h4>
+      <p>Click the <strong>paperclip icon</strong> in the chat input bar, select your file, then type your question. For example: upload a PDF and ask "Summarize the key points."</p>
+      <h4>Image analysis</h4>
+      <p>Upload any image and the AI can describe it, extract text, identify objects, or answer questions about the visual content.</p>
+      <h4>File size limits</h4>
+      <p>Free plan: 5MB per file. Pro plan: 50MB per file. Files are stored temporarily and deleted after 30 days.</p>
+    `
+  },
+  'troubleshooting': {
+    title: 'Troubleshooting common issues',
+    category: 'Troubleshooting',
+    content: `
+      <span class="article-tag">Troubleshooting</span>
+      <h4>AI responses are slow</h4>
+      <p>This usually happens during peak usage. Try switching to the <strong>Fast</strong> model for quicker responses, or wait a moment and retry.</p>
+      <h4>Chat history not saving</h4>
+      <p>Go to <strong>Settings → Data & Storage</strong> and make sure <strong>Save chat history</strong> is toggled on.</p>
+      <h4>Can't upload a file</h4>
+      <p>Check that your file is under the size limit and is a supported type. If the issue persists, try refreshing the page and uploading again.</p>
+      <h4>Responses cut off mid-sentence</h4>
+      <p>You may have hit the token limit for a single response. Try asking the AI to "continue" or break your request into smaller parts.</p>
+      <h4>Page not loading correctly</h4>
+      <ol>
+        <li>Hard refresh with <code>Ctrl+Shift+R</code> / <code>⌘+Shift+R</code></li>
+        <li>Clear your browser cache</li>
+        <li>Try a different browser</li>
+        <li>Disable browser extensions temporarily</li>
+      </ol>
+      <h4>Still stuck?</h4>
+      <p>Report the issue using our <a href="report-bug.html" style="color:#60a5fa;">Report a Bug</a> page — include your browser, OS, and a description of what happened.</p>
+    `
+  }
+};
+
+// ===== SEARCH =====
+let currentQuery = '';
+
+function handleSearch(val) {
+  const q = val.trim().toLowerCase();
+  currentQuery = q;
+
+  // Sync both search inputs
+  document.getElementById('topbarSearch').value = val;
+  document.getElementById('heroSearch').value = val;
+
+  if (!q) { clearSearch(); return; }
+
+  const popCards   = document.querySelectorAll('.pop-card');
+  const topicCards = document.querySelectorAll('.topic-card');
+  let totalVisible = 0;
+
+  popCards.forEach(card => {
+    const text = (card.dataset.title + ' ' + card.dataset.cat).toLowerCase();
+    const match = text.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) totalVisible++;
+  });
+
+  topicCards.forEach(card => {
+    const text = (card.dataset.title + ' ' + card.dataset.desc).toLowerCase();
+    const match = text.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) totalVisible++;
+  });
+
+  // Labels: hide if all children hidden
+  const popVisible = [...popCards].some(c => !c.classList.contains('hidden'));
+  const topicVisible = [...topicCards].some(c => !c.classList.contains('hidden'));
+  document.getElementById('labelPopular').classList.toggle('hidden', !popVisible);
+  document.getElementById('labelTopics').classList.toggle('hidden', !topicVisible);
+
+  // Results bar
+  const bar = document.getElementById('searchResultsBar');
+  bar.classList.add('visible');
+  document.getElementById('searchResultsText').textContent =
+    `${totalVisible} result${totalVisible !== 1 ? 's' : ''} for "${val.trim()}"`;
+
+  // No results
+  document.getElementById('noResults').classList.toggle('visible', totalVisible === 0);
+}
+
+function clearSearch() {
+  currentQuery = '';
+  document.getElementById('topbarSearch').value = '';
+  document.getElementById('heroSearch').value   = '';
+  document.querySelectorAll('.pop-card, .topic-card, .section-label').forEach(el => el.classList.remove('hidden'));
+  document.getElementById('searchResultsBar').classList.remove('visible');
+  document.getElementById('noResults').classList.remove('visible');
+}
+
+function searchKeydown(e) {
+  if (e.key === 'Escape') clearSearch();
+}
+
+// ⌘K / Ctrl+K focuses hero search
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('heroSearch').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+// ===== ARTICLE MODAL =====
+function openArticle(e, id) {
+  e.preventDefault();
+  const art = ARTICLES[id];
+  if (!art) return;
+  document.getElementById('articleTitle').textContent = art.title;
+  document.getElementById('articleBody').innerHTML = art.content + `
+    <div class="article-helpful">
+      Was this article helpful?
+      <button class="helpful-btn yes" onclick="markHelpful(true)">👍 Yes</button>
+      <button class="helpful-btn no"  onclick="markHelpful(false)">👎 No</button>
+    </div>`;
+  document.getElementById('articleOverlay').classList.add('open');
+}
+
+function closeArticle() {
+  document.getElementById('articleOverlay').classList.remove('open');
+}
+
+function closeArticleIfOutside(e) {
+  if (e.target === document.getElementById('articleOverlay')) closeArticle();
+}
+
+function markHelpful(yes) {
+  const div = document.querySelector('.article-helpful');
+  div.innerHTML = yes
+    ? '<span style="color:#4ade80">✓ Glad it helped!</span>'
+    : '<span style="color:var(--text-muted)">Thanks for the feedback — we\'ll improve this article.</span>';
+}
+</script>

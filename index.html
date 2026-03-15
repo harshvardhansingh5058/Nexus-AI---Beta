@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Next-generation AI chat with 3D avatars and custom GPTs.">
+  <meta property="og:title" content="Nexus – AI Chat">
+  <meta property="og:description" content="Next-generation AI chat with 3D avatars and custom GPTs.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Nexus – AI Chat">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%235b5bd6'/><text y='.9em' font-size='72' x='14' font-family='Arial' font-weight='bold' fill='white'>N</text></svg>">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus — Advanced AI Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg-main:#0a0a0a;--bg-sidebar:#0f0f0f;--bg-input:#18181b;
+      --bg-card:#141414;--bg-card2:#1a1a1a;--border:rgba(255,255,255,0.08);
+      --border-s:rgba(255,255,255,0.12);--text-p:#f0f0f0;--text-s:#888;
+      --text-m:#555;--accent:#ffffff;--accent-h:#cccccc;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Sora',sans-serif;background:var(--bg-main);color:var(--text-p);overflow-x:hidden}
+
+    #bgStar{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+    /* NAV */
+    .nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      height:58px;display:flex;align-items:center;
+      padding:0 40px;justify-content:space-between;
+      background:rgba(10,10,10,0.88);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo{width:30px;height:30px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000}
+    .nav-name{font-size:15px;font-weight:700;color:var(--text-p);letter-spacing:-0.3px}
+    .nav-r{display:flex;align-items:center;gap:6px}
+    .nl{padding:7px 13px;border-radius:8px;font-size:12.5px;color:var(--text-s);text-decoration:none;transition:all 0.18s;font-weight:500}
+    .nl:hover{background:rgba(255,255,255,0.06);color:var(--text-p)}
+    .nav-login{padding:7px 13px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-s);font-size:12.5px;font-weight:500;text-decoration:none;transition:all 0.18s}
+    .nav-login:hover{background:rgba(255,255,255,0.08);color:var(--text-p)}
+    .nav-cta{padding:8px 17px;border-radius:9px;background:#ffffff;color:#000000;font-size:12.5px;font-weight:600;text-decoration:none;transition:all 0.18s;margin-left:6px}
+    .nav-cta:hover{background:#dddddd;transform:translateY(-1px);box-shadow:0 5px 18px rgba(255,255,255,0.12)}
+
+    /* HERO */
+    .hero{
+      position:relative;z-index:1;min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:100px 24px 80px;overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;top:5%;left:50%;transform:translateX(-50%);
+      width:650px;height:480px;
+      background:radial-gradient(ellipse,rgba(255,255,255,0.04) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+      padding:5px 15px;border-radius:100px;
+      font-size:11.5px;font-weight:600;color:#a0a0a8;letter-spacing:0.3px;
+      margin-bottom:26px;animation:fd 0.6s ease both;
+    }
+    .bdot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+    .hero-title{
+      font-size:clamp(38px,7vw,74px);font-weight:800;letter-spacing:-2.5px;
+      line-height:1.05;margin-bottom:20px;animation:fd 0.6s ease 0.1s both;
+    }
+    .hero-title .ac{
+      background:linear-gradient(135deg,#ffffff 0%,#cccccc 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-sub{font-size:16px;color:var(--text-s);max-width:500px;line-height:1.65;margin-bottom:38px;animation:fd 0.6s ease 0.2s both}
+    .hero-btns{display:flex;align-items:center;gap:11px;flex-wrap:wrap;justify-content:center;animation:fd 0.6s ease 0.3s both;margin-bottom:48px}
+    .btn-p{display:flex;align-items:center;gap:8px;background:#ffffff;color:#000000;padding:13px 26px;border-radius:12px;font-family:'Sora',sans-serif;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s;box-shadow:0 0 36px rgba(255,255,255,0.12)}
+    .btn-p:hover{background:#dddddd;transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,255,255,0.18)}
+    .btn-s{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border-s);color:var(--text-s);padding:12px 22px;border-radius:12px;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s}
+    .btn-s:hover{background:rgba(255,255,255,0.08);color:var(--text-p)}
+
+    /* Trust row */
+    .trust{display:flex;align-items:center;gap:24px;flex-wrap:wrap;justify-content:center;animation:fd 0.6s ease 0.4s both}
+    .ti{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-m)}
+    .tsep{width:1px;height:14px;background:var(--border)}
+
+    @keyframes fd{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+
+    /* MOCKUP */
+    .mockup{
+      position:relative;z-index:1;max-width:800px;width:100%;
+      margin:0 auto 80px;padding:0 24px;animation:fd 0.7s ease 0.45s both;
+    }
+    .mw{background:var(--bg-sidebar);border:1px solid var(--border-s);border-radius:16px;overflow:hidden;box-shadow:0 36px 90px rgba(0,0,0,0.65)}
+    .mtb{background:var(--bg-card);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:7px}
+    .md{width:9px;height:9px;border-radius:50%}
+    .mt{font-size:11.5px;color:var(--text-m);margin-left:7px}
+    .mb{padding:22px 26px;display:flex;flex-direction:column;gap:14px}
+    .mm{display:flex;gap:11px;align-items:flex-start}
+    .mav{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+    .mav.u{background:#ffffff;color:#000000}
+    .mav.a{background:var(--bg-card2);border:1px solid var(--border);color:var(--text-s)}
+    .mbub{background:var(--bg-card2);border:1px solid var(--border);border-radius:11px;padding:10px 14px;max-width:82%;font-size:12.5px;line-height:1.6;color:var(--text-s)}
+    .mbub.ub{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.12);color:var(--text-p)}
+    .mbub code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:11.5px;color:#a0a0a8}
+    .tdots{display:flex;gap:4px;padding:3px 0;align-items:center}
+    .tdots span{width:5px;height:5px;border-radius:50%;background:var(--text-m);animation:tb 1.2s infinite}
+    .tdots span:nth-child(2){animation-delay:0.2s}
+    .tdots span:nth-child(3){animation-delay:0.4s}
+    @keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+    /* FEATURES */
+    section{position:relative;z-index:1}
+    .features{padding:90px 40px;max-width:1080px;margin:0 auto}
+    .slbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#a0a0a8;margin-bottom:12px}
+    .stitle{font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-1px;margin-bottom:12px;max-width:520px}
+    .ssub{font-size:14.5px;color:var(--text-s);max-width:480px;line-height:1.7;margin-bottom:50px}
+    .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+    .fc{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;padding:22px 24px;transition:all 0.28s}
+    .fc:hover{background:rgba(255,255,255,0.04);border-color:var(--border-s);transform:translateY(-3px)}
+    .fi{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:19px}
+    .ftitle{font-size:14.5px;font-weight:600;margin-bottom:7px}
+    .fdesc{font-size:12.5px;color:var(--text-s);line-height:1.65}
+
+    /* STATS */
+    .stats{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,0.01);padding:52px 40px}
+    .sgrid{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center}
+    .snum{font-size:34px;font-weight:800;letter-spacing:-1px;margin-bottom:5px}
+    .snum span{background:linear-gradient(135deg,#f0f0f0,#a0a0a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .slb{font-size:12.5px;color:var(--text-s)}
+
+    /* CTA */
+    .cta-s{padding:90px 40px;text-align:center}
+    .cta-box{max-width:660px;margin:0 auto;background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:56px 44px;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:380px;height:280px;background:radial-gradient(ellipse,rgba(255,255,255,0.08) 0%,transparent 70%);pointer-events:none}
+    .ctitle{font-size:clamp(24px,4vw,36px);font-weight:700;letter-spacing:-1px;margin-bottom:12px}
+    .csub{font-size:14px;color:var(--text-s);margin-bottom:28px;line-height:1.6}
+    .cinp-row{display:flex;gap:9px;max-width:420px;margin:0 auto}
+    .cinp{flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:11px;padding:11px 15px;color:var(--text-p);font-family:'Sora',sans-serif;font-size:13px;outline:none;transition:border-color 0.18s}
+    .cinp:focus{border-color:rgba(255,255,255,0.3)}
+    .cinp::placeholder{color:var(--text-m)}
+    .csub-btn{background:#ffffff;border:none;border-radius:11px;padding:11px 20px;color:#000000;font-family:'Sora',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:background 0.18s;white-space:nowrap}
+    .csub-btn:hover{background:#dddddd}
+
+    /* FOOTER */
+    .footer{border-top:1px solid var(--border);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .fb{display:flex;align-items:center;gap:8px}
+    .flogo{width:24px;height:24px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000}
+    .fname{font-size:13px;font-weight:600;color:var(--text-s)}
+    .flinks{display:flex;gap:18px;flex-wrap:wrap}
+    .flink{font-size:12px;color:var(--text-m);text-decoration:none;transition:color 0.15s}
+    .flink:hover{color:var(--text-s)}
+    .fcopy{font-size:11.5px;color:var(--text-m)}
+
+    @media(max-width:768px){
+      .nav{padding:0 18px}
+      .nl{display:none}
+      .hero{padding:90px 18px 60px}
+      .features{padding:60px 18px}
+      .sgrid{grid-template-columns:repeat(2,1fr)}
+      .cinp-row{flex-direction:column}
+      .footer{flex-direction:column;text-align:center}
+      .mockup{display:none}
+    }
+  </style>
+</head>
+<body>
+<canvas id="bgStar"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="index.html">
+    <div class="nav-logo">N</div>
+    <span class="nav-name">Nexus</span>
+  </a>
+  <div class="nav-r">
+    <a class="nl" href="#features">Features</a>
+    <a class="nl" href="docs.html">Docs</a>
+    <a class="nl" href="release-notes.html">What's New</a>
+    <a class="nav-login" href="login.html">Sign In</a>
+    <a class="nav-cta" href="login.html">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><div class="bdot"></div>Voice · Image Gen · 3D Models</div>
+  <h1 class="hero-title">The AI that<br><span class="ac">actually gets you</span></h1>
+  <p class="hero-sub">Nexus is an AI assistant built for the way you think. Chat naturally in Hindi or English, generate images, write code — all in one place.</p>
+  <div class="hero-btns">
+    <a class="btn-p" href="login.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Start for Free
+    </a>
+    <a class="btn-s" href="nexus_chat.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Try Demo
+    </a>
+  </div>
+  <div class="trust">
+    <div class="ti"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Free to start</div>
+    <div class="tsep"></div>
+    <div class="ti"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>No credit card needed</div>
+    <div class="tsep"></div>
+    <div class="ti"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Your own LLM coming soon</div>
+  </div>
+</section>
+
+<!-- CHAT MOCKUP -->
+<div class="mockup">
+  <div class="mw">
+    <div class="mtb">
+      <div class="md" style="background:#ef4444"></div>
+      <div class="md" style="background:#fbbf24"></div>
+      <div class="md" style="background:#4ade80"></div>
+      <span class="mt">Nexus — New Chat</span>
+    </div>
+    <div class="mb">
+      <div class="mm">
+        <div class="mav u">R</div>
+        <div class="mbub ub">Ek Python function likh jo kisi website se product prices scrape kare</div>
+      </div>
+      <div class="mm">
+        <div class="mav a"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+        <div class="mbub">Bilkul! Yeh raha <code>requests</code> + <code>BeautifulSoup</code> se ek clean solution:<br><br>
+          <span style="font-family:monospace;font-size:11.5px;color:#a0a0a8;background:rgba(255,255,255,0.05);display:block;padding:9px;border-radius:8px;line-height:1.75">
+            import requests<br>from bs4 import BeautifulSoup<br><br>def scrape_prices(url):<br>&nbsp;&nbsp;res = requests.get(url)<br>&nbsp;&nbsp;soup = BeautifulSoup(res.text, 'html.parser')<br>&nbsp;&nbsp;return [p.text for p in soup.select('.price')]
+          </span>
+        </div>
+      </div>
+      <div class="mm">
+        <div class="mav u">R</div>
+        <div class="mbub ub">Error handling bhi add karo aur JSON mein return karo</div>
+      </div>
+      <div class="mm">
+        <div class="mav a"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+        <div class="mbub"><div class="tdots"><span></span><span></span><span></span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="slbl">Features</div>
+  <h2 class="stitle">Sab kuch ek hi jagah</h2>
+  <p class="ssub">Faster, smarter, aur zyada personal — kisi bhi AI se better experience.</p>
+  <div class="fgrid">
+    <div class="fc"><div class="fi" style="background:rgba(255,255,255,0.06)">💬</div><div class="ftitle">Natural Conversations</div><div class="fdesc">Hindi, English, ya dono mix karo. Nexus context samjhta hai aur baat yaad rakhta hai.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(96,165,250,0.12)">⚡</div><div class="ftitle">Fast Streaming</div><div class="fdesc">Jawab word by word aata hai — koi wait nahi. Sub-second latency ke saath.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(74,222,128,0.12)">🎨</div><div class="ftitle">Image Generation</div><div class="fdesc">Jo chaaho describe karo. HD quality images generate hoti hain — multiple styles mein.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(251,191,36,0.12)">🎙️</div><div class="ftitle">Voice Input</div><div class="fdesc">Type ki jagah bolo. Voice tab tak chalta hai jab tak tum manually band nahi karte.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(167,139,250,0.12)">🧩</div><div class="ftitle">GPT Store</div><div class="fdesc">Hundreds of specialized AI assistants — research se fitness tak. Apna GPT bhi banao.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(248,113,113,0.12)">📁</div><div class="ftitle">File Upload</div><div class="fdesc">PDFs, images, code files directly attach karo. Nexus padh ke jawab deta hai.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(52,211,153,0.12)">👥</div><div class="ftitle">Group Chat</div><div class="fdesc">Multiple AI models ek saath chat mein. Compare karo, debate karo, saath kaam karo.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(251,146,60,0.12)">🌗</div><div class="ftitle">Dark / Light Theme</div><div class="fdesc">3 themes, accent colors, font size — sab kuch apni marzi se customize karo.</div></div>
+    <div class="fc"><div class="fi" style="background:rgba(34,211,238,0.12)">💾</div><div class="ftitle">Chat History</div><div class="fdesc">Saari conversations save hoti hain. Koi bhi purani chat resume karo, rename karo, export karo.</div></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="sgrid">
+    <div><div class="snum"><span>10x</span></div><div class="slb">Typing se tez</div></div>
+    <div><div class="snum"><span>30+</span></div><div class="slb">Languages</div></div>
+    <div><div class="snum"><span>100+</span></div><div class="slb">GPTs available</div></div>
+    <div><div class="snum"><span>∞</span></div><div class="slb">Free messages</div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-s">
+  <div class="cta-box">
+    <h2 class="ctitle">Aaj pehli baat shuru karo</h2>
+    <p class="csub">Free hai. Card nahi chahiye. Apna LLM bhi aane wala hai — seedha Nexus mein.</p>
+    <div class="cinp-row">
+      <input class="cinp" type="email" placeholder="Email daalo early access ke liye">
+      <button class="csub-btn" onclick="joinW()">Join Waitlist</button>
+    </div>
+    <p style="font-size:11.5px;color:var(--text-m);margin-top:14px">Ya <a href="nexus_chat.html" style="color:#a0a0a8;text-decoration:none">abhi demo try karo →</a></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="fb"><div class="flogo">N</div><span class="fname">Nexus AI</span></div>
+  <div class="flinks">
+    <a class="flink" href="docs.html">Docs</a>
+    <a class="flink" href="help-center.html">Help</a>
+    <a class="flink" href="release-notes.html">Release Notes</a>
+    <a class="flink" href="report-bug.html">Report Bug</a>
+    <a class="flink" href="terms-policies.html">Terms & Privacy</a>
+  </div>
+  <div class="fcopy">© 2025 Nexus AI</div>
+</footer>
+
+<script>
+// Stars
+const C=document.getElementById('bgStar'),X=C.getContext('2d');let W,H,S=[];
+function iS(){W=C.width=innerWidth;H=C.height=innerHeight;S=Array.from({length:160},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.2+0.2,o:Math.random()*0.44+0.06,sp:Math.random()*0.22+0.05}))}
+function dF(){X.clearRect(0,0,W,H);S.forEach(s=>{X.beginPath();X.arc(s.x,s.y,s.r,0,Math.PI*2);X.fillStyle=`rgba(255,255,255,${s.o})`;X.fill();s.o+=s.sp*0.007;if(s.o>0.52||s.o<0.05)s.sp*=-1});requestAnimationFrame(dF)}
+iS();dF();window.addEventListener('resize',iS);
+
+// Waitlist
+function joinW(){
+  const i=document.querySelector('.cinp'),v=i.value.trim();
+  if(!v||!v.includes('@')){i.style.borderColor='#f87171';setTimeout(()=>i.style.borderColor='',2000);return}
+  const b=document.querySelector('.csub-btn');
+  b.textContent='✓ You\'re in!';b.style.background='#15803d';b.disabled=true;
+  i.value='';i.placeholder='Thanks! We\'ll be in touch.';
+}
+
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.querySelector('.nav').style.background=scrollY>20?'rgba(10,10,10,0.96)':'rgba(10,10,10,0.88)';
+});
+
+// Feature cards animate in
+const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{
+  if(e.isIntersecting){e.target.style.animation=`fd 0.45s ease ${i*0.06}s both`;obs.unobserve(e.target)}
+}),{threshold:0.1});
+document.querySelectorAll('.fc').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

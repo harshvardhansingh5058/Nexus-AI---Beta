@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Nexus terms of service and privacy policy.">
+  <meta property="og:title" content="Terms & Privacy – Nexus">
+  <meta property="og:description" content="Nexus terms of service and privacy policy.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Terms & Privacy – Nexus">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%235b5bd6'/><text y='.9em' font-size='72' x='14' font-family='Arial' font-weight='bold' fill='white'>N</text></svg>">
+  <meta name="theme-color" content="#5b5bd6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Policies — Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg-main: #0a0a0a; --border: rgba(255,255,255,0.08); --text-primary: #f0f0f0; --text-secondary: #888; --text-muted: #555; }
+    html, body { font-family: 'Sora', sans-serif; background: var(--bg-main); color: var(--text-primary); overflow-x: hidden; }
+    .topbar { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .logo-box { width: 30px; height: 30px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #000; }
+    .brand-name { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
+    .back-btn { display: flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 9px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--text-secondary); font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .back-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+    .hero { padding: 64px 28px 48px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 300px; background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%); pointer-events: none; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 20px; letter-spacing: 0.4px; }
+    .hero h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 14px; }
+    .hero p { font-size: 15px; color: var(--text-secondary); max-width: 440px; margin: 0 auto; line-height: 1.6; }
+    .hero-updated { display: inline-block; margin-top: 16px; font-size: 12px; color: var(--text-muted); }
+    .layout { display: flex; max-width: 1040px; margin: 0 auto; padding: 48px 28px 80px; gap: 48px; }
+    .sidebar { width: 200px; flex-shrink: 0; position: sticky; top: 76px; align-self: flex-start; }
+    .sidebar-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; }
+    .nav-link { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; font-size: 12.5px; color: var(--text-secondary); text-decoration: none; transition: all 0.2s; margin-bottom: 2px; cursor: pointer; }
+    .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .nav-link.active { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+    .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+    .content { flex: 1; min-width: 0; }
+    .section-block { margin-bottom: 56px; scroll-margin-top: 80px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .section-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); flex-shrink: 0; }
+    .section-title { font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
+    .section-num { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+    .content-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .content-item { padding: 18px 22px; border-bottom: 1px solid var(--border); }
+    .content-item:last-child { border-bottom: none; }
+    .content-item h4 { font-size: 13.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+    .content-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+    .content-item ul { list-style: none; margin-top: 8px; }
+    .content-item ul li { font-size: 13px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; padding: 3px 0 3px 16px; position: relative; }
+    .content-item ul li::before { content: '–'; position: absolute; left: 0; color: var(--text-muted); }
+    .highlight-box { background: rgba(96,165,250,0.06); border: 1px solid rgba(96,165,250,0.15); border-radius: 10px; padding: 14px 18px; margin-top: 10px; font-size: 12.5px; color: #93c5fd; line-height: 1.6; }
+    .warning-box { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.15); border-radius: 10px; padding: 14px 18px; margin-top: 10px; font-size: 12.5px; color: #fcd34d; line-height: 1.6; }
+    .contact-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 24px; text-align: center; margin-top: 40px; }
+    .contact-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .contact-card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
+    .contact-email { display: inline-flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 100px; background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: var(--text-primary); font-size: 13px; text-decoration: none; transition: all 0.2s; }
+    .contact-email:hover { background: rgba(255,255,255,0.12); }
+    .page-footer { border-top: 1px solid var(--border); padding: 28px; text-align: center; color: var(--text-muted); font-size: 12px; }
+    .page-footer a { color: var(--text-muted); text-decoration: none; margin: 0 10px; transition: color 0.2s; }
+    .page-footer a:hover { color: var(--text-secondary); }
+    @media(max-width:700px) { .layout { flex-direction: column; } .sidebar { width: 100%; position: static; } .hero h1 { font-size: 28px; } }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-box">S</div>
+    <span class="brand-name">Terms &amp; Policies</span>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </a>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Legal
+  </div>
+  <h1>Terms &amp; Policies</h1>
+  <p>Everything you need to know about how we operate, protect your data, and what you can expect from us.</p>
+  <span class="hero-updated">Last updated: March 2025</span>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-label">Contents</div>
+    <a class="nav-link active" href="#terms"><div class="nav-dot"></div>Terms of Service</a>
+    <a class="nav-link" href="#privacy"><div class="nav-dot"></div>Privacy Policy</a>
+    <a class="nav-link" href="#cookies"><div class="nav-dot"></div>Cookie Policy</a>
+    <a class="nav-link" href="#usage"><div class="nav-dot"></div>Acceptable Use</a>
+    <a class="nav-link" href="#ip"><div class="nav-dot"></div>Intellectual Property</a>
+    <a class="nav-link" href="#contact"><div class="nav-dot"></div>Contact Us</a>
+  </div>
+
+  <div class="content">
+
+    <div class="section-block" id="terms">
+      <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <span class="section-title">Terms of Service</span>
+        <span class="section-num">01</span>
+      </div>
+      <div class="content-card">
+        <div class="content-item">
+          <h4>Agreement to Terms</h4>
+          <p>By accessing or using Nexus, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you do not have permission to access the service.</p>
+        </div>
+        <div class="content-item">
+          <h4>Use of Service</h4>
+          <p>You may use Nexus for personal and commercial purposes, subject to these terms. You are responsible for all activity that occurs under your account.</p>
+          <ul>
+            <li>You must be at least 13 years of age to use this service</li>
+            <li>You are responsible for maintaining the confidentiality of your account credentials</li>
+            <li>You must notify us immediately of any unauthorized use of your account</li>
+            <li>One person or entity may not maintain more than one free account</li>
+          </ul>
+        </div>
+        <div class="content-item">
+          <h4>Account Termination</h4>
+          <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason, including if you breach these Terms.</p>
+          <div class="warning-box">⚠ Accounts that violate our policies may be suspended without warning. Repeated violations result in permanent termination.</div>
+        </div>
+        <div class="content-item">
+          <h4>Disclaimer of Warranties</h4>
+          <p>Nexus is provided on an "as is" and "as available" basis without any warranties of any kind. We do not warrant that the service will be uninterrupted or error-free.</p>
+        </div>
+        <div class="content-item">
+          <h4>Limitation of Liability</h4>
+          <p>In no event shall Nexus, its directors, employees, or agents be liable for any indirect, incidental, special, or consequential damages resulting from your use of the service.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="privacy">
+      <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <span class="section-title">Privacy Policy</span>
+        <span class="section-num">02</span>
+      </div>
+      <div class="content-card">
+        <div class="content-item">
+          <h4>Information We Collect</h4>
+          <ul>
+            <li>Account information — name, email address, password (hashed)</li>
+            <li>Profile information — avatar, username, preferences</li>
+            <li>Usage data — conversations, messages, features used</li>
+            <li>Device information — IP address, browser type, operating system</li>
+            <li>Payment information — processed securely via Stripe; we never store card details</li>
+          </ul>
+        </div>
+        <div class="content-item">
+          <h4>How We Use Your Information</h4>
+          <ul>
+            <li>To operate and deliver the services you requested</li>
+            <li>To personalize your experience and improve AI response quality</li>
+            <li>To send transactional emails and service announcements</li>
+            <li>To detect and prevent fraud, abuse, or security incidents</li>
+            <li>To comply with legal obligations</li>
+          </ul>
+          <div class="highlight-box">ℹ We never sell your personal data to third parties. Your conversations are not shared with advertisers.</div>
+        </div>
+        <div class="content-item">
+          <h4>Data Retention</h4>
+          <p>We retain your account data for as long as your account is active. You can delete your account and all associated data at any time from Settings → Account. Deletion is permanent and irreversible.</p>
+        </div>
+        <div class="content-item">
+          <h4>Your Rights</h4>
+          <ul>
+            <li>Right to access the personal data we hold about you</li>
+            <li>Right to correct inaccurate or incomplete data</li>
+            <li>Right to delete your data ("right to be forgotten")</li>
+            <li>Right to export your data in machine-readable format</li>
+            <li>Right to object to processing of your data</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="cookies">
+      <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/><circle cx="14" cy="14" r="1.5" fill="currentColor"/><circle cx="15" cy="8" r="1.5" fill="currentColor"/></svg></div>
+        <span class="section-title">Cookie Policy</span>
+        <span class="section-num">03</span>
+      </div>
+      <div class="content-card">
+        <div class="content-item">
+          <h4>What Are Cookies</h4>
+          <p>Cookies are small text files stored on your device when you visit our website. They help us remember your preferences and improve your experience.</p>
+        </div>
+        <div class="content-item">
+          <h4>Types of Cookies We Use</h4>
+          <ul>
+            <li><strong style="color:var(--text-primary)">Essential</strong> — Required for the service to function. Cannot be disabled.</li>
+            <li><strong style="color:var(--text-primary)">Preference</strong> — Remember your settings like theme, language, and font size.</li>
+            <li><strong style="color:var(--text-primary)">Analytics</strong> — Help us understand usage patterns (anonymous data only).</li>
+            <li><strong style="color:var(--text-primary)">Session</strong> — Keep you logged in. Deleted when you close your browser.</li>
+          </ul>
+        </div>
+        <div class="content-item">
+          <h4>Managing Cookies</h4>
+          <p>You can control and delete cookies through your browser settings. Disabling essential cookies may prevent certain parts of the service from working correctly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="usage">
+      <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <span class="section-title">Acceptable Use Policy</span>
+        <span class="section-num">04</span>
+      </div>
+      <div class="content-card">
+        <div class="content-item">
+          <h4>Permitted Use</h4>
+          <p>You may use Nexus for any lawful purpose including personal projects, work tasks, learning, creative writing, and research.</p>
+        </div>
+        <div class="content-item">
+          <h4>Prohibited Activities</h4>
+          <ul>
+            <li>Generating content that is illegal, harmful, threatening, or abusive</li>
+            <li>Attempting to bypass or interfere with security features</li>
+            <li>Using the service to spam, phish, or conduct fraudulent activity</li>
+            <li>Generating malware, viruses, or any malicious code</li>
+            <li>Harvesting or collecting user data without consent</li>
+            <li>Impersonating any person or entity</li>
+            <li>Using automated scripts beyond normal usage patterns</li>
+          </ul>
+          <div class="warning-box">⚠ Violations are taken seriously. We cooperate with law enforcement when required by applicable law.</div>
+        </div>
+        <div class="content-item">
+          <h4>AI-Generated Content</h4>
+          <p>You are responsible for reviewing all AI-generated content before use. Nexus AI can make mistakes — do not rely on it for medical, legal, financial, or safety-critical decisions without professional review.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="ip">
+      <div class="section-header">
+        <div class="section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <span class="section-title">Intellectual Property</span>
+        <span class="section-num">05</span>
+      </div>
+      <div class="content-card">
+        <div class="content-item">
+          <h4>Your Content</h4>
+          <p>You retain full ownership of the content you input into Nexus. By using the service, you grant us a limited license to process your content solely to provide the service to you.</p>
+          <div class="highlight-box">ℹ You own your conversations. We do not claim rights to content you create using Nexus.</div>
+        </div>
+        <div class="content-item">
+          <h4>AI Output Ownership</h4>
+          <p>Content generated by the AI in response to your prompts is provided for your use. You may use AI-generated content for personal or commercial purposes, subject to applicable laws in your jurisdiction.</p>
+        </div>
+        <div class="content-item">
+          <h4>Our Property</h4>
+          <p>The Nexus name, logo, interface design, and underlying technology are protected by intellectual property laws. You may not copy, reproduce, or distribute our proprietary assets without written permission.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="contact">
+      <div class="contact-card">
+        <div style="width:44px;height:44px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <h3>Questions about our policies?</h3>
+        <p>If you have any questions about these Terms or our Privacy Policy, our team is here to help.</p>
+        <a href="/cdn-cgi/l/email-protection#8de1e8eaece1cdfef9ecfff9f8fde3ece0e8a3eee2e0" class="contact-email">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span class="__cf_email__" data-cfemail="731f1614121f33000712010706031d121e165d101c1e">[email&#160;protected]</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  <p>© 2025 Nexus &nbsp;·&nbsp;
+    <a href="help-center.html">Help Center</a>
+    <a href="release-notes.html">Release Notes</a>
+    <a href="report-bug.html">Report a Bug</a>
+  </p>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const sections = document.querySelectorAll('.section-block');
+  const navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s =>
