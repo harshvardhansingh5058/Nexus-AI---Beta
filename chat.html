@@ -14003,30 +14003,69 @@
     }
 
     // ============================================================
-    // AUTH GUARD — redirects to login if not authenticated
-    // ============================================================
-    (async function() {
-      var _ls = localStorage.getItem("nx_sess");
-      if (window._sb) {
-        var _gs = await window._sb.auth.getSession();
-        if (_gs.data && _gs.data.session && _gs.data.session.user) {
-          var u = _gs.data.session.user;
-          var nm = (u.user_metadata && u.user_metadata.full_name) || u.email.split("@")[0] || "User";
-          var av = (u.user_metadata && u.user_metadata.avatar_url) || null;
-          localStorage.setItem("profile_name", nm);
-          localStorage.setItem("profile_username", u.email || "");
-          if (av) localStorage.setItem("profile_avatar", av);
-          localStorage.setItem("nx_sess", u.id);
-          if (typeof syncProfileUI === "function")
-            syncProfileUI({ name:nm, username:u.email||"" , initial:nm[0].toUpperCase(), imgSrc:av });
-        } else if (!_ls) {
-          window.location.replace("login.html"); return;
-        }
-      } else if (!_ls) {
-        window.location.replace("login.html"); return;
-      }
-      if (_ls) { try { var s=JSON.parse(_ls); if(s.name)localStorage.setItem("profile_name",s.name); if(s.em)localStorage.setItem("profile_username",s.em.split("@")[0]); } catch(e){} }
-    })();
+    // AUTH GUARD — OAuth redirect ke baad session load hone ka wait karta hai
+     // ============================================================
+     (async function() {
+       // Check if this is an OAuth callback
+       var isOAuth = window.location.hash.includes('access_token') ||
+                     window.location.search.includes('code=') ||
+                     window.location.hash.includes('refresh_token');
+
+       if (isOAuth) {
+         // Wait for Supabase to process OAuth token (max 5 sec)
+         if (window._sb) {
+           var _attempts = 0;
+           var _waitSess = setInterval(async function() {
+             _attempts++;
+             var _gs2 = await window._sb.auth.getSession();
+             if (_gs2.data && _gs2.data.session && _gs2.data.session.user) {
+               clearInterval(_waitSess);
+               var u = _gs2.data.session.user;
+               var nm = (u.user_metadata && u.user_metadata.full_name) || u.email.split('@')[0] || 'User';
+               var av = (u.user_metadata && u.user_metadata.avatar_url) || null;
+               localStorage.setItem('profile_name', nm);
+               localStorage.setItem('profile_username', u.email || '');
+               if (av) localStorage.setItem('profile_avatar', av);
+               localStorage.setItem('nx_sess', u.id);
+               if (typeof syncProfileUI === 'function')
+                 syncProfileUI({ name:nm, username:u.email||'', initial:nm[0].toUpperCase(), imgSrc:av });
+             } else if (_attempts >= 10) {
+               clearInterval(_waitSess);
+               window.location.replace('login.html');
+             }
+           }, 500);
+         }
+         return;
+       }
+
+       // Normal load — check session
+       var _ls = localStorage.getItem('nx_sess');
+       if (window._sb) {
+         var _gs = await window._sb.auth.getSession();
+         if (_gs.data && _gs.data.session && _gs.data.session.user) {
+           var u = _gs.data.session.user;
+           var nm = (u.user_metadata && u.user_metadata.full_name) || u.email.split('@')[0] || 'User';
+           var av = (u.user_metadata && u.user_metadata.avatar_url) || null;
+           localStorage.setItem('profile_name', nm);
+           localStorage.setItem('profile_username', u.email || '');
+           if (av) localStorage.setItem('profile_avatar', av);
+           localStorage.setItem('nx_sess', u.id);
+           if (typeof syncProfileUI === 'function')
+             syncProfileUI({ name:nm, username:u.email||'', initial:nm[0].toUpperCase(), imgSrc:av });
+         } else if (!_ls) {
+           window.location.replace('login.html'); return;
+         }
+       } else if (!_ls) {
+         window.location.replace('login.html'); return;
+       }
+       if (_ls) {
+         try {
+           var s = JSON.parse(_ls);
+           if (s.name) localStorage.setItem('profile_name', s.name);
+           if (s.em) localStorage.setItem('profile_username', s.em.split('@')[0]);
+         } catch(e) {}
+       }
+     })();
 
     // ============================================================
     // STREAMING AI — word-by-word effect
