@@ -7866,12 +7866,10 @@
     .fb-star.on{filter:none;transform:scale(1.1)}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Security Headers -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(self), geolocation=()">
-  </head>
+</head>
 
 <body>
 
@@ -7950,7 +7948,7 @@
           <!-- Search bar -->
           <div class="sidebar-search" id="sidebarSearchWrap">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="sidebarSearchInput" placeholder="Search chats..." oninput="_debouncedSidebarSearch(this.value)" autocomplete="off">
+            <input type="text" id="sidebarSearchInput" placeholder="Search chats..." oninput="_debouncedSsearch(this.value)" autocomplete="off">
             <button id="sidebarSearchClear" onclick="sidebarSearchClear()" style="display:none;">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
@@ -8146,6 +8144,18 @@
 
             <!-- Chrome-style logout submenu -->
             <div class="logout-submenu">
+              <div class="logout-account-row active-account" style="cursor:default;">
+                <div class="logout-acct-avatar" id="popupAcctAvatar" style="background:linear-gradient(135deg,#5b5bd6,#3a3a8c);">U</div>
+                <div class="logout-acct-info">
+                  <div class="logout-acct-name" id="popupAcctName">User</div>
+                  <div class="logout-acct-email" id="popupAcctEmail" style="font-size:11px;"></div>
+                </div>
+              </div>
+              <div class="logout-submenu-divider"></div>
+              <button class="logout-all-btn" onclick="sbSignOut()" style="color:#f87171;gap:8px;display:flex;align-items:center;width:100%;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Log out
+              </button><div class="logout-submenu">
               <div class="logout-submenu-header">Signed-in Accounts</div>
 
               <!-- Account 1 (double-click to switch) -->
@@ -9969,24 +9979,11 @@
   </div>
 
   <script>
+    // Clickjacking protection
+    if (window.self !== window.top) { try { window.top.location = window.self.location; } catch(e) {} }
 
-    // ── Debounce utility ─────────────────────────────────
-    function _debounce(fn, delay) {
-      let timer;
-      return function(...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    }
-
-    // Debounced sidebar search
-    const _debouncedSidebarSearch = _debounce(sidebarSearch, 250);
-
-    // ── Clickjacking protection ───────────────────────
-    if (window.self !== window.top) {
-      // App is being loaded in an iframe — redirect to top
-      window.top.location = window.self.location;
-    }
+    function _debounce(fn, ms) { let t; return function(...a) { clearTimeout(t); t = setTimeout(()=>fn.apply(this,a), ms); }; }
+    const _debouncedSsearch = _debounce(sidebarSearch, 250);
     // ===== APP CONFIG — change these to rebrand =====
     const APP_CONFIG = {
       name:    'Nexus',
@@ -11170,12 +11167,9 @@
     // Public API - mirrors old localStorage interface
     function lsGenId() { return 'ch' + Date.now() + Math.random().toString(36).substr(2,4); }
 
-    const MAX_CHAT_MEMORY = 200; // max messages per chat in memory
     function lsSave() {
-      // Trim memory if too large
-      if (chatHistory.length > MAX_CHAT_MEMORY) {
-        chatHistory = chatHistory.slice(-MAX_CHAT_MEMORY);
-      }
+      // Trim if too large (performance)
+      if (chatHistory.length > 200) chatHistory = chatHistory.slice(-200);
       // GPT session → keep in localStorage (small, per-GPT)
       if (isGptChatActive && gpCurrentAddon) {
         try { localStorage.setItem(GPT_CHAT_PREFIX + gpCurrentAddon.id, JSON.stringify(chatHistory)); } catch(e) {}
@@ -11574,9 +11568,10 @@
 
     function sendMessage() {
       const input = getActiveInput();
-      const text = input.value.trim().replace(/\x00/g, "").slice(0, 32000);
+      const text = input.value.trim();
       // Respect "Send with Enter" toggle — if off, only Shift+Enter or button sends
       if (!text || isTyping) return;
+      if (text.length > 32000) { showAppToast('Message too long (max 32,000 chars)'); return; }
 
       if (!conversationMode) {
         switchView('chat');
@@ -11724,7 +11719,7 @@
       div.className = `message ${role}`;
       const avatarContent = role === 'ai'
         ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`
-        : (localStorage.getItem('profile_avatar') ? `<img src="${localStorage.getItem('profile_avatar')}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" loading="lazy">` : (localStorage.getItem('profile_name')||'U')[0].toUpperCase());
+        : (localStorage.getItem('profile_avatar') ? `<img src="${localStorage.getItem('profile_avatar')}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : (localStorage.getItem('profile_name')||'U')[0].toUpperCase());
 
       // Build attachment previews HTML
       let attachHTML = '';
@@ -11733,7 +11728,7 @@
         attachments.forEach(f => {
           if (f.type?.startsWith('image/') || (f.type === 'image')) {
             const src = f.type === 'image' ? `data:${f.mediaType};base64,${f.data}` : URL.createObjectURL(f);
-            attachHTML += `<img src="${src}" alt="${f.name}" style="max-width:220px;max-height:160px;border-radius:8px;border:1px solid var(--border);object-fit:cover;cursor:pointer;" onclick="window.open(this.src)" loading="lazy">`;
+            attachHTML += `<img src="${src}" alt="${f.name}" style="max-width:220px;max-height:160px;border-radius:8px;border:1px solid var(--border);object-fit:cover;cursor:pointer;" onclick="window.open(this.src)">`;
           } else {
             attachHTML += `<div style="display:flex;align-items:center;gap:6px;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--text-secondary);">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
@@ -12008,15 +12003,13 @@
     }
 
     function scrollToBottom(smooth = false) {
-      if (window._scrollRaf) return;
-      window._scrollRaf = requestAnimationFrame(() => {
-        const area = document.getElementById('chatArea') || document.getElementById('messages');
-        if (area) {
-          if (smooth) area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
-          else area.scrollTop = area.scrollHeight;
-        }
-        window._scrollRaf = null;
-      });
+      const area = document.getElementById('chatArea');
+      if (smooth) {
+        area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+      } else {
+        area.scrollTop = area.scrollHeight;
+      }
+      document.getElementById('scrollBottomBtn')?.classList.remove('visible');
     }
 
     // Show/hide scroll-to-bottom button
@@ -12052,7 +12045,7 @@
       const savedAvatar = localStorage.getItem('profile_avatar');
       const epAv = document.getElementById('epAvatar');
       if (savedAvatar) {
-        epAv.innerHTML = `<img src="${savedAvatar}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`;
+        epAv.innerHTML = `<img src="${savedAvatar}" style="width:100%;height:100%;object-fit:cover;">`;
       } else {
         epAv.innerHTML = '';
         epAv.textContent = savedName.charAt(0).toUpperCase();
@@ -12111,7 +12104,7 @@
       if (sidebarName) sidebarName.textContent = name;
 
       if (imgSrc) {
-        const imgTag = `<img src="${imgSrc}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" loading="lazy">`;
+        const imgTag = `<img src="${imgSrc}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
         if (popupAv)   popupAv.innerHTML  = imgTag;
         if (sidebarAv) sidebarAv.innerHTML = imgTag;
       } else {
@@ -12142,7 +12135,7 @@
         const rowAvatar = activeRow.querySelector('.logout-acct-avatar');
         if (rowAvatar) {
           if (imgSrc) {
-            rowAvatar.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" loading="lazy">`;
+            rowAvatar.innerHTML = `<img src="${imgSrc}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
           } else {
             rowAvatar.innerHTML = initial;
           }
@@ -12180,7 +12173,7 @@
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           const resized = canvas.toDataURL('image/jpeg', 0.85);
           const epAv = document.getElementById('epAvatar');
-          epAv.innerHTML = `<img src="${resized}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">`;
+          epAv.innerHTML = `<img src="${resized}" style="width:100%;height:100%;object-fit:cover;">`;
           document.getElementById('epRemovePhotoBtn').style.display = 'block';
         };
         img.src = e.target.result;
@@ -12242,23 +12235,7 @@
       });
     }
 
-    function logoutAllAccounts(event) {
-      event.stopPropagation();
-      showConfirm({
-        title: 'Sign out of all accounts?',
-        desc: "You'll be signed out from all signed-in accounts.",
-        okLabel: 'Sign out all',
-        type: 'danger',
-        onOk: () => {
-          document.getElementById('profilePopup').classList.remove('open');
-          showAppToast('Signed out from all accounts');
-          setTimeout(() => {
-            if (typeof sbSignOut === 'function') sbSignOut();
-            else window.location.replace('login.html');
-          }, 600);
-        }
-      });
-    }
+    function logoutAllAccounts(event) { if(event)event.stopPropagation(); sbSignOut(); }
 
     function switchAccount(row, event) {
       event.stopPropagation();
@@ -12379,7 +12356,7 @@
           reader.onload = ev => {
             chip.innerHTML = `
               <span class="file-thumb" style="width:32px;height:32px;border-radius:5px;overflow:hidden;flex-shrink:0;background:#111;">
-                <img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;" alt="" loading="lazy">
+                <img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;" alt="">
               </span>
               <div style="display:flex;flex-direction:column;gap:1px;min-width:0;">
                 <span class="file-name" title="${file.name}" style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${file.name}</span>
@@ -13159,7 +13136,7 @@
       const reader = new FileReader();
       reader.onload = e => {
         gcCurrentIcon = e.target.result;
-        document.getElementById('gcIconDisplay').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" loading="lazy">`;
+        document.getElementById('gcIconDisplay').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;">`;
         document.getElementById('gcIconPicker').style.display = 'none';
         gcSyncPreview();
         gcShowSaved('Icon updated');
@@ -13209,7 +13186,7 @@
         previewName.textContent = name; previewName.style.display = 'block'; navTitle.textContent = name;
       } else { previewName.style.display = 'none'; navTitle.textContent = 'New GPT'; }
       if (gcCurrentIcon) {
-        if (gcCurrentIcon.startsWith('data:')) previewIcon.innerHTML = `<img src="${gcCurrentIcon}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" loading="lazy">`;
+        if (gcCurrentIcon.startsWith('data:')) previewIcon.innerHTML = `<img src="${gcCurrentIcon}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;">`;
         else previewIcon.innerHTML = `<span style="font-size:28px;">${gcCurrentIcon}</span>`;
       }
       const starterInputs = document.querySelectorAll('#gcStartersList .gc-starter-input');
@@ -15327,7 +15304,7 @@
       // Knowledge graph
       if (knowledgeGraph?.description) {
         html += `<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;">
-          ${knowledgeGraph.imageUrl ? `<img src="${knowledgeGraph.imageUrl}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy">` : ''}
+          ${knowledgeGraph.imageUrl ? `<img src="${knowledgeGraph.imageUrl}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : ''}
           <div>
             <div style="font-weight:700;font-size:14px;color:var(--text-primary);">${escapeHtml(knowledgeGraph.title || '')}</div>
             ${knowledgeGraph.type ? `<div style="font-size:11px;color:var(--accent);margin:2px 0;">${escapeHtml(knowledgeGraph.type)}</div>` : ''}
@@ -15345,7 +15322,7 @@
             onmouseover="this.style.borderColor='rgba(var(--accent-rgb,91,91,214),0.4)'"
             onmouseout="this.style.borderColor='var(--border)'">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-              <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=16" width="14" height="14" style="border-radius:3px;" onerror=\'this.style.display=\"none\"' loading="lazy">
+              <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=16" width="14" height="14" style="border-radius:3px;" onerror=\'this.style.display=\"none\"'>
               <span style="font-size:11px;color:var(--text-muted);">${escapeHtml(domain)}</span>
               <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">#${i+1}</span>
             </div>
@@ -15373,34 +15350,20 @@
     }
 
 
-    // ── Safe redirect helper ─────────────────────────
-    function _safeRedirect(url) {
-      // Only allow same-origin redirects
-      try {
-        const u = new URL(url, window.location.origin);
-        if (u.origin === window.location.origin) {
-          window.location.replace(url);
-        } else {
-          window.location.replace('login.html');
-        }
-      } catch(e) {
-        window.location.replace('login.html');
-      }
+    // Suppress console.log on production
+    if (location.hostname !== '127.0.0.1' && location.hostname !== 'localhost') {
+      console.log = console.debug = console.info = function(){};
     }
 
-    // ── Production logger (suppress console in prod) ─
-    (function() {
-      const isDev = window.location.hostname === '127.0.0.1' ||
-                    window.location.hostname === 'localhost';
-      if (!isDev) {
-        const noop = () => {};
-        // Keep errors visible, suppress info/debug
-        console.log  = noop;
-        console.debug = noop;
-        console.info = noop;
-        // console.warn and console.error kept for debugging
+    document.addEventListener('DOMContentLoaded', function() {
+      function _fp() {
+        var n=localStorage.getItem('profile_name')||'User', e=localStorage.getItem('profile_email')||'', av=localStorage.getItem('profile_avatar');
+        var nEl=document.getElementById('popupAcctName'), eEl=document.getElementById('popupAcctEmail'), aEl=document.getElementById('popupAcctAvatar');
+        if(nEl) nEl.textContent=n; if(eEl) eEl.textContent=e;
+        if(aEl){if(av){aEl.innerHTML='<img src="'+av+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';aEl.style.background='none';}else{aEl.textContent=n[0].toUpperCase();}}
       }
-    })();
+      _fp(); setTimeout(_fp,1500);
+    });
   </script>
   <button id="feedbackBtn" onclick="openFeedback()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Feedback</button>
   <div id="feedbackModal"><div class="fb-box"><div class="fb-title">Share your feedback</div><div class="fb-sub">Help us improve Nexus AI.</div><div class="fb-stars" id="fbStars"><span class="fb-star" onclick="fbSetStar(1)">&#11088;</span><span class="fb-star" onclick="fbSetStar(2)">&#11088;</span><span class="fb-star" onclick="fbSetStar(3)">&#11088;</span><span class="fb-star" onclick="fbSetStar(4)">&#11088;</span><span class="fb-star" onclick="fbSetStar(5)">&#11088;</span></div><div class="fb-types"><button class="fb-type active" onclick="fbSetType(this,'bug')">Bug</button><button class="fb-type" onclick="fbSetType(this,'feature')">Feature</button><button class="fb-type" onclick="fbSetType(this,'ux')">UX</button><button class="fb-type" onclick="fbSetType(this,'other')">Other</button></div><textarea class="fb-textarea" id="fbText" placeholder="Tell us what you think..."></textarea><div class="fb-actions"><button class="fb-cancel" onclick="closeFeedback()">Cancel</button><button class="fb-send" onclick="submitFeedback()">Send</button></div></div></div>
