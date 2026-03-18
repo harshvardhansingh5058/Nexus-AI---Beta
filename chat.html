@@ -8139,29 +8139,22 @@
               </span>
             </div>
 
-            <!-- Clean single-account profile popup -->
-             <div class="logout-submenu">
-               <!-- Current logged-in user -->
-               <div id="popupCurrentUser" class="logout-account-row active-account" style="cursor:default;pointer-events:none;">
-                 <div class="logout-acct-avatar" id="popupAvatar" style="background:linear-gradient(135deg,#5b5bd6,#3a3a8c);">U</div>
-                 <div class="logout-acct-info">
-                   <div class="logout-acct-name" id="popupUserName">User</div>
-                   <div class="logout-acct-email" id="popupUserEmail" style="font-size:11px;color:var(--text-muted);">—</div>
-                 </div>
-               </div>
-
-               <div class="logout-submenu-divider"></div>
-
-               <!-- Single logout button -->
-               <button class="logout-all-btn" onclick="sbSignOut()" style="color:#f87171;gap:8px;display:flex;align-items:center;width:100%;">
-                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                   <polyline points="16 17 21 12 16 7"/>
-                   <line x1="21" y1="12" x2="9" y2="12"/>
-                 </svg>
-                 Log out
-               </button>
-             </div></div>
+            <!-- Chrome-style logout submenu -->
+            <div class="logout-submenu">
+              <!-- Current logged-in user -->
+              <div class="logout-account-row active-account" style="cursor:default;">
+                <div class="logout-acct-avatar" id="popupAcctAvatar" style="background:linear-gradient(135deg,#5b5bd6,#3a3a8c);">U</div>
+                <div class="logout-acct-info">
+                  <div class="logout-acct-name" id="popupAcctName">User</div>
+                  <div class="logout-acct-email" id="popupAcctEmail" style="font-size:11px;">—</div>
+                </div>
+              </div>
+              <div class="logout-submenu-divider"></div>
+              <button class="logout-all-btn" onclick="sbSignOut()" style="color:#f87171;gap:8px;display:flex;align-items:center;width:100%;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -12160,12 +12153,68 @@
       });
     }
 
-    function logoutAllAccounts(event) {
-      if (event) event.stopPropagation();
-      sbSignOut();
-    }
+    function logoutAllAccounts(event) { if(event)event.stopPropagation(); sbSignOut(); }
 
-    function switchAccount(row, event) { /* removed */ }
+    function switchAccount(row, event) {
+      event.stopPropagation();
+
+      const name = row.dataset.name;
+      const email = row.dataset.email || 'username@example.com';
+      const initial = row.dataset.initial;
+      const color = row.dataset.color || 'var(--accent)';
+
+      // Mark active row with ✓ and remove from others
+      document.querySelectorAll('.logout-account-row').forEach(r => r.classList.remove('active-account'));
+      row.classList.add('active-account');
+
+      const username = email.split('@')[0];
+      const imgEl = row.querySelector('img');
+      const imgSrc = imgEl ? imgEl.src : null;
+
+      // Update localStorage so reload will persist it
+      localStorage.setItem('profile_name', name);
+      localStorage.setItem('profile_username', username);
+      if (imgSrc) {
+        localStorage.setItem('profile_avatar', imgSrc);
+      } else {
+        localStorage.removeItem('profile_avatar');
+        localStorage.setItem('profile_avatarBg', color);
+      }
+
+      // Re-use syncProfileUI to update the whole UI (popup header, sidebar footer, etc.)
+      syncProfileUI({
+        name: name,
+        username: username,
+        initial: initial,
+        imgSrc: imgSrc
+      });
+
+      // Update default colored background if no image
+      const footerAvatar = document.getElementById('sidebarAvatar');
+      const popupAvatar = document.querySelector('.popup-avatar');
+      if (!imgSrc) {
+        if (footerAvatar) {
+          footerAvatar.style.background = color;
+          footerAvatar.style.color = '#fff';
+          footerAvatar.style.border = 'none';
+        }
+        if (popupAvatar) {
+          popupAvatar.style.background = color;
+        }
+      }
+
+      // Flash animation on the footer avatar to confirm switch
+      if (footerAvatar) {
+        footerAvatar.style.transform = 'scale(1.25)';
+        footerAvatar.style.transition = 'transform 0.2s ease';
+        setTimeout(() => { footerAvatar.style.transform = 'scale(1)'; }, 200);
+      }
+
+      // Close popup after short delay
+      setTimeout(() => {
+        document.getElementById('profilePopup').classList.remove('open');
+      }, 400);
+    }
 
     // ── File Upload + Bubble Animation ──────────────────────
     let attachedFiles = { main: [], bottom: [] };
@@ -15219,33 +15268,20 @@
     }
 
 
-    // ── Populate profile popup on load ────────────────────────
     document.addEventListener('DOMContentLoaded', function() {
-      function _updatePopup() {
-        const name  = localStorage.getItem('profile_name') || 'User';
-        const email = localStorage.getItem('profile_email') || localStorage.getItem('profile_username') || '';
-        const avatar = localStorage.getItem('profile_avatar');
-        const avatarBg = localStorage.getItem('profile_avatarBg');
-
-        const nameEl   = document.getElementById('popupUserName');
-        const emailEl  = document.getElementById('popupUserEmail');
-        const avatarEl = document.getElementById('popupAvatar');
-
-        if (nameEl)  nameEl.textContent  = name;
-        if (emailEl) emailEl.textContent = email;
-        if (avatarEl) {
-          if (avatar) {
-            avatarEl.innerHTML = '<img src="' + avatar + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
-            avatarEl.style.background = 'none';
-          } else {
-            avatarEl.textContent = name[0].toUpperCase();
-            avatarEl.style.background = avatarBg || 'linear-gradient(135deg,#5b5bd6,#3a3a8c)';
-          }
-        }
+      function _fillPopup() {
+        var n=localStorage.getItem('profile_name')||'User';
+        var e=localStorage.getItem('profile_email')||localStorage.getItem('profile_username')||'';
+        var av=localStorage.getItem('profile_avatar');
+        var bg=localStorage.getItem('profile_avatarBg')||'linear-gradient(135deg,#5b5bd6,#3a3a8c)';
+        var nEl=document.getElementById('popupAcctName');
+        var eEl=document.getElementById('popupAcctEmail');
+        var aEl=document.getElementById('popupAcctAvatar');
+        if(nEl) nEl.textContent=n;
+        if(eEl) eEl.textContent=e;
+        if(aEl){if(av){aEl.innerHTML='<img src="'+av+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';aEl.style.background='none';}else{aEl.textContent=n[0].toUpperCase();aEl.style.background=bg;}}
       }
-      _updatePopup();
-      // Re-run after auth loads
-      setTimeout(_updatePopup, 1500);
+      _fillPopup(); setTimeout(_fillPopup, 1500);
     });
   </script>
   <button id="feedbackBtn" onclick="openFeedback()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Feedback</button>
