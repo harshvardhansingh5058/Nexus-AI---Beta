@@ -11092,14 +11092,12 @@
           if (event === 'SIGNED_IN') showAppToast('Welcome back, ' + name + '! 👋');
         } else {
           localStorage.removeItem('nx_sess');
-          // Any event without a user = session lost → redirect
+          // Only redirect if explicitly signed out or user was deleted
           if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
             showAppToast('Signed out');
             setTimeout(() => window.location.replace('login.html'), 800);
-          } else if (!user) {
-            // Token expired or session invalid
-            setTimeout(() => window.location.replace('login.html'), 500);
           }
+
         }
       });
     }
