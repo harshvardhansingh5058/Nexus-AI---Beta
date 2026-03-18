@@ -513,15 +513,24 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const CONFIGURED = SUPABASE_URL !== 'YOUR_SUPABASE_URL';
 const _sb = CONFIGURED ? createClient(SUPABASE_URL, SUPABASE_ANON) : null;
 
+// Dynamic base URL — works on localhost + GitHub Pages + any hosting
+function _getBase() {
+  const p = window.location.pathname;
+  return window.location.origin + p.substring(0, p.lastIndexOf('/') + 1);
+}
+function _goChat() {
+  window.location.href = _getBase() + 'chat.html';
+}
+
 if (!CONFIGURED) {
   document.getElementById('setupBanner').style.display = 'flex';
 } else {
   const { data: { session } } = await _sb.auth.getSession();
-  if (session) { saveSess(session.user); location.href = 'chat.html'; }
+  if (session) { saveSess(session.user); _goChat(); }
   _sb.auth.onAuthStateChange((event, sess) => {
-    if (event === 'PASSWORD_RECOVERY') { location.href = 'chat.html'; return; }
+    if (event === 'PASSWORD_RECOVERY') { _goChat(); return; }
     if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && sess) {
-      saveSess(sess.user); location.href = 'chat.html';
+      saveSess(sess.user); _goChat();
     }
   });
 }
@@ -692,12 +701,14 @@ function startResendTimer() {
 window.oauthLogin = async (provider) => {
   if (!CONFIGURED) { showToast('⚠️ Supabase not configured',4000); return; }
   const btnId = provider==='google'?'gBtn':'ghBtn';
-  document.getElementById(btnId)?.classList.add('busy');
-  let redirectTo;
-  if (window.location.protocol==='file:') { redirectTo='http://127.0.0.1:5500/chat.html'; }
-  else { redirectTo=window.location.origin+window.location.pathname.replace(/login\.html.*$/,'')+'chat.html'; }
+  const btn = document.getElementById(btnId);
+  if (btn) btn.classList.add('busy');
+  const redirectTo = _getBase() + 'chat.html';
   const { error } = await _sb.auth.signInWithOAuth({ provider, options:{ redirectTo } });
-  if (error) { showToast('✗ '+fe(error.message),4000); document.getElementById(btnId)?.classList.remove('busy'); }
+  if (error) {
+    showToast('✗ ' + fe(error.message), 4000);
+    if (btn) btn.classList.remove('busy');
+  }
 };
 
 // ── Forgot password ──
@@ -706,8 +717,7 @@ window.doForgot = async () => {
   if (!em||!okE(em)) { msg('fA','err','Enter a valid email address.'); return; }
   if (!CONFIGURED) { msg('fA','ok','✓ (Demo) Reset link sent to '+em); return; }
   let redirectTo;
-  if (window.location.protocol==='file:') { redirectTo='http://127.0.0.1:5500/chat.html'; }
-  else { redirectTo=window.location.origin+window.location.pathname.replace(/login\.html.*$/,'')+'chat.html'; }
+  redirectTo = _getBase() + 'chat.html';
   const { error } = await _sb.auth.resetPasswordForEmail(em,{ redirectTo });
   if (error) msg('fA','err',fe(error.message));
   else msg('fA','ok','✓ Reset link sent! Check your inbox.');
@@ -753,7 +763,7 @@ function demoVerify(code) {
     localStorage.setItem('profile_name',name);
     localStorage.setItem('profile_username',_otpEmail.split('@')[0]);
     msg('oA','ok','✓ Verified! Taking you in…');
-    setTimeout(()=>location.href='chat.html',700);
+    setTimeout(()=>_goChat(),700);
   } else { msg('oA','err','Wrong code. Demo OTP is 123456.'); unbusy('oBtn','oT','Verify & Continue'); }
 }
 

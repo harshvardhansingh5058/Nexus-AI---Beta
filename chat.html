@@ -8139,81 +8139,29 @@
               </span>
             </div>
 
-            <!-- Chrome-style logout submenu -->
-            <div class="logout-submenu">
-              <div class="logout-submenu-header">Signed-in Accounts</div>
+            <!-- Clean single-account profile popup -->
+             <div class="logout-submenu">
+               <!-- Current logged-in user -->
+               <div id="popupCurrentUser" class="logout-account-row active-account" style="cursor:default;pointer-events:none;">
+                 <div class="logout-acct-avatar" id="popupAvatar" style="background:linear-gradient(135deg,#5b5bd6,#3a3a8c);">U</div>
+                 <div class="logout-acct-info">
+                   <div class="logout-acct-name" id="popupUserName">User</div>
+                   <div class="logout-acct-email" id="popupUserEmail" style="font-size:11px;color:var(--text-muted);">—</div>
+                 </div>
+               </div>
 
-              <!-- Account 1 (double-click to switch) -->
-              <div class="logout-account-row active-account" data-name="User" data-email="user@example.com"
-                data-initial="U" data-color="linear-gradient(135deg, #1a73e8, #0d47a1)"
-                onclick="switchAccount(this, event)" title="Click to switch account">
-                <div class="logout-acct-avatar" style="background: linear-gradient(135deg, #1a73e8, #0d47a1);">
-                  U
-                </div>
-                <div class="logout-acct-info">
-                  <div class="logout-acct-name">User</div>
-                  <div class="logout-acct-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd888e988fbd98859c908d9198d39e9290">[email&#160;protected]</a></div>
-                </div>
-                <button class="logout-acct-btn" onclick="logoutAccount('user@example.com', event)">
-                  Log out
-                </button>
-              </div>
+               <div class="logout-submenu-divider"></div>
 
-              <!-- Account 2 (double-click to switch) -->
-              <div class="logout-account-row" data-name="Work Account" data-email="work@example.com" data-initial="W"
-                data-color="linear-gradient(135deg, #7c3aed, #4c1d95)" onclick="switchAccount(this, event)"
-                title="Click to switch account">
-                <div class="logout-acct-avatar" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);">
-                  W
-                </div>
-                <div class="logout-acct-info">
-                  <div class="logout-acct-name">Work Account</div>
-                  <div class="logout-acct-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="88ffe7fae3c8edf0e9e5f8e4eda6ebe7e5">[email&#160;protected]</a></div>
-                </div>
-                <button class="logout-acct-btn" onclick="logoutAccount('work@example.com', event)">
-                  Log out
-                </button>
-              </div>
-
-              <!-- Account 3 (double-click to switch) -->
-              <div class="logout-account-row" data-name="Admin" data-email="admin@example.com" data-initial="A"
-                data-color="linear-gradient(135deg, #059669, #065f46)" onclick="switchAccount(this, event)"
-                title="Click to switch account">
-                <div class="logout-acct-avatar" style="background: linear-gradient(135deg, #059669, #065f46);">
-                  A
-                </div>
-                <div class="logout-acct-info">
-                  <div class="logout-acct-name">Admin</div>
-                  <div class="logout-acct-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e58481888c8ba5809d8488958980cb868a88">[email&#160;protected]</a></div>
-                </div>
-                <button class="logout-acct-btn" onclick="logoutAccount('admin@example.com', event)">
-                  Log out
-                </button>
-              </div>
-
-              <div class="logout-submenu-divider"></div>
-
-              <!-- OAuth Login Buttons -->
-              <button class="logout-all-btn" onclick="sbSignInGoogle()" style="color:var(--text-primary);gap:8px;display:flex;align-items:center;">
-                <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Sign in with Google
-              </button>
-              <button class="logout-all-btn" onclick="sbSignInGitHub()" style="color:var(--text-primary);gap:8px;display:flex;align-items:center;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                Sign in with GitHub
-              </button>
-              <div class="logout-submenu-divider"></div>
-
-              <!-- Logout All -->
-              <button class="logout-all-btn" onclick="logoutAllAccounts(event)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-                Log out from all accounts
-              </button>
-            </div>
+               <!-- Single logout button -->
+               <button class="logout-all-btn" onclick="sbSignOut()" style="color:#f87171;gap:8px;display:flex;align-items:center;width:100%;">
+                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                   <polyline points="16 17 21 12 16 7"/>
+                   <line x1="21" y1="12" x2="9" y2="12"/>
+                 </svg>
+                 Log out
+               </button>
+             </div></div>
           </div>
         </div>
       </div>
@@ -12213,83 +12161,11 @@
     }
 
     function logoutAllAccounts(event) {
-      event.stopPropagation();
-      showConfirm({
-        title: 'Sign out of all accounts?',
-        desc: "You'll be signed out from all signed-in accounts.",
-        okLabel: 'Sign out all',
-        type: 'danger',
-        onOk: () => {
-          document.getElementById('profilePopup').classList.remove('open');
-          showAppToast('Signed out from all accounts');
-          setTimeout(() => {
-            if (typeof sbSignOut === 'function') sbSignOut();
-            else window.location.replace('login.html');
-          }, 600);
-        }
-      });
+      if (event) event.stopPropagation();
+      sbSignOut();
     }
 
-    function switchAccount(row, event) {
-      event.stopPropagation();
-
-      const name = row.dataset.name;
-      const email = row.dataset.email || 'username@example.com';
-      const initial = row.dataset.initial;
-      const color = row.dataset.color || 'var(--accent)';
-
-      // Mark active row with ✓ and remove from others
-      document.querySelectorAll('.logout-account-row').forEach(r => r.classList.remove('active-account'));
-      row.classList.add('active-account');
-
-      const username = email.split('@')[0];
-      const imgEl = row.querySelector('img');
-      const imgSrc = imgEl ? imgEl.src : null;
-
-      // Update localStorage so reload will persist it
-      localStorage.setItem('profile_name', name);
-      localStorage.setItem('profile_username', username);
-      if (imgSrc) {
-        localStorage.setItem('profile_avatar', imgSrc);
-      } else {
-        localStorage.removeItem('profile_avatar');
-        localStorage.setItem('profile_avatarBg', color);
-      }
-
-      // Re-use syncProfileUI to update the whole UI (popup header, sidebar footer, etc.)
-      syncProfileUI({
-        name: name,
-        username: username,
-        initial: initial,
-        imgSrc: imgSrc
-      });
-
-      // Update default colored background if no image
-      const footerAvatar = document.getElementById('sidebarAvatar');
-      const popupAvatar = document.querySelector('.popup-avatar');
-      if (!imgSrc) {
-        if (footerAvatar) {
-          footerAvatar.style.background = color;
-          footerAvatar.style.color = '#fff';
-          footerAvatar.style.border = 'none';
-        }
-        if (popupAvatar) {
-          popupAvatar.style.background = color;
-        }
-      }
-
-      // Flash animation on the footer avatar to confirm switch
-      if (footerAvatar) {
-        footerAvatar.style.transform = 'scale(1.25)';
-        footerAvatar.style.transition = 'transform 0.2s ease';
-        setTimeout(() => { footerAvatar.style.transform = 'scale(1)'; }, 200);
-      }
-
-      // Close popup after short delay
-      setTimeout(() => {
-        document.getElementById('profilePopup').classList.remove('open');
-      }, 400);
-    }
+    function switchAccount(row, event) { /* removed */ }
 
     // ── File Upload + Bubble Animation ──────────────────────
     let attachedFiles = { main: [], bottom: [] };
@@ -15342,6 +15218,35 @@
       return ctx;
     }
 
+
+    // ── Populate profile popup on load ────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+      function _updatePopup() {
+        const name  = localStorage.getItem('profile_name') || 'User';
+        const email = localStorage.getItem('profile_email') || localStorage.getItem('profile_username') || '';
+        const avatar = localStorage.getItem('profile_avatar');
+        const avatarBg = localStorage.getItem('profile_avatarBg');
+
+        const nameEl   = document.getElementById('popupUserName');
+        const emailEl  = document.getElementById('popupUserEmail');
+        const avatarEl = document.getElementById('popupAvatar');
+
+        if (nameEl)  nameEl.textContent  = name;
+        if (emailEl) emailEl.textContent = email;
+        if (avatarEl) {
+          if (avatar) {
+            avatarEl.innerHTML = '<img src="' + avatar + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+            avatarEl.style.background = 'none';
+          } else {
+            avatarEl.textContent = name[0].toUpperCase();
+            avatarEl.style.background = avatarBg || 'linear-gradient(135deg,#5b5bd6,#3a3a8c)';
+          }
+        }
+      }
+      _updatePopup();
+      // Re-run after auth loads
+      setTimeout(_updatePopup, 1500);
+    });
   </script>
   <button id="feedbackBtn" onclick="openFeedback()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Feedback</button>
   <div id="feedbackModal"><div class="fb-box"><div class="fb-title">Share your feedback</div><div class="fb-sub">Help us improve Nexus AI.</div><div class="fb-stars" id="fbStars"><span class="fb-star" onclick="fbSetStar(1)">&#11088;</span><span class="fb-star" onclick="fbSetStar(2)">&#11088;</span><span class="fb-star" onclick="fbSetStar(3)">&#11088;</span><span class="fb-star" onclick="fbSetStar(4)">&#11088;</span><span class="fb-star" onclick="fbSetStar(5)">&#11088;</span></div><div class="fb-types"><button class="fb-type active" onclick="fbSetType(this,'bug')">Bug</button><button class="fb-type" onclick="fbSetType(this,'feature')">Feature</button><button class="fb-type" onclick="fbSetType(this,'ux')">UX</button><button class="fb-type" onclick="fbSetType(this,'other')">Other</button></div><textarea class="fb-textarea" id="fbText" placeholder="Tell us what you think..."></textarea><div class="fb-actions"><button class="fb-cancel" onclick="closeFeedback()">Cancel</button><button class="fb-send" onclick="submitFeedback()">Send</button></div></div></div>
